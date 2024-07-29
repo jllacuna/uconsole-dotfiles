@@ -1,3 +1,7 @@
+# Start SSH agent and add SSH key
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+
 # Debug waybar
 # GTK_DEBUG="interactive waybar"; export GTK_DEBUG
 
