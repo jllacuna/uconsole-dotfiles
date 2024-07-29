@@ -1,0 +1,37 @@
+{
+  "layer": "bottom",
+  "modules-left": [ "clock", "sway/mode" ],
+  "modules-center": [ "sway/workspaces" ],
+  "modules-right": [ "network", "battery" ],
+  "battery": {
+    "format": "{capacity}% {icon}",
+    "format-charging": "{capacity}% 󱐋 {icon}",
+    "format-icons": ["", "", "", "", ""],
+    "states": {
+      "warning": 30,
+      "critical": 15
+    }
+  },
+  "clock": {
+    "format": "{:%a %b %d %I:%M %p}",
+    "format-alt": "{:%a %m/%d/%Y %H:%M %Z %z}",
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "format-calendar-weekdays": "<span color='#9e83e2'><b>{}</b></span>",
+    "format-calendar-weeks": "<span color='#595959'><b>{}</b></span>",
+    "today-format": "<span color='#f075cd'><b>{}</b></span>",
+    "calendar-weeks-pos": "right"
+  },
+  "network": {
+    "format": "{ifname}",
+    "format-wifi": "{signalStrength}% {icon}",
+    "format-disconnected": "󰤮,",
+    "tooltip-format-wifi": "{ifname} | {essid} | {ipaddr}",
+    "format-icons": [ "󰤟", "󰤢", "󰤥", "󰤨" ]
+  },
+  "sway/mode": {
+    "tooltip": false
+  },
+  "sway/workspaces": {
+    "sort-by-number": true
+  }
+}

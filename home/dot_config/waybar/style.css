@@ -1,0 +1,75 @@
+window#waybar {
+  color: white;
+  background: rgba(97, 5, 25, 0.25);
+}
+
+tooltip {
+  background: #242424;
+  border-radius: 15px;
+}
+
+#network, #battery {
+  font-size: 1.2rem;
+  padding: 0 15px 0 10px;
+  border-radius: 15px;
+  margin: 5px 5px 5px 0;
+}
+
+#battery {
+  background: #0a5c21;
+}
+
+#battery.warning {
+  background: #a13a12;
+}
+
+#battery.critical {
+  background: #aa092c;
+}
+
+#clock {
+  font-size: 1.1rem;
+  padding: 0 10px;
+}
+
+#mode {
+  color: #fbaabb;
+  font-size: 1.2rem;
+  background: #aa092c;
+  padding: 0 10px;
+  border-radius: 15px;
+  margin: 5px 10px 5px 0;
+}
+
+#network {
+  background: #0a455c;
+}
+
+#workspaces {
+  color: #242424;
+  background: white;
+  border-radius: 15px;
+  padding: 1px;
+  margin: 4px;
+}
+
+#workspaces button {
+  border-radius: 15px;
+  margin: 0 1px;
+  transition: all 0.3s ease-in-out;
+}
+
+#workspaces button:hover {
+  color: white;
+  background: rgba(65, 34, 145, 0.4);
+}
+
+#workspaces button.visible {
+  color: white;
+  min-width: 40px;
+  background: #412291;
+}
+
+#workspaces button.urgent {
+  background: #eec6b6;
+}

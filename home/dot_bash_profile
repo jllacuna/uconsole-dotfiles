@@ -1,0 +1,5 @@
+# Debug waybar
+# GTK_DEBUG="interactive waybar"; export GTK_DEBUG
+
+# Start sway on login
+[ "$(tty)" = "/dev/tty1" ] && exec sway

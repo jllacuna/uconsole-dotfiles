@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+sudo apt update
+sudo apt install sway waybar swayidle swaylock
+sudo apt install --fix-broken
