@@ -14,7 +14,7 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term foot
+set $term wezterm
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -30,6 +30,13 @@ output * bg /home/jllacuna/.local/share/backgrounds/red_mountain-1280x720.jpg fi
 
 # Rotate uConsole display
 output DSI-1 transform 90
+
+# Remove title bar
+# https://github.com/swaywm/sway/issues/6946#issuecomment-1182012140
+default_border none
+default_floating_border none
+titlebar_padding 1
+titlebar_border_thickness 0
 
 #
 # Example configuration:
