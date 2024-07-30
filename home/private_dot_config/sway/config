@@ -83,6 +83,9 @@ exec swayidle -w \
     # Start a terminal
     bindsym $mod+Return exec $term
 
+    # Start Firefox
+    bindsym $mod+tab exec firefox --new-window
+
     # Kill focused window
     bindsym $mod+Shift+q kill
 
