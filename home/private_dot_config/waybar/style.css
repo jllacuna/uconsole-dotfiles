@@ -16,15 +16,15 @@ tooltip {
 }
 
 #battery {
-  background: #0a5c21;
+  background: linear-gradient(180deg, rgba(18, 161, 58, 1.0), rgba(18, 161, 58, 1.0) 30%, rgba(18, 161, 58, 0.7));
 }
 
 #battery.warning {
-  background: #a13a12;
+  background: linear-gradient(180deg, rgba(161, 58, 18, 1.0), rgba(161, 58, 18, 1.0) 30%, rgba(161, 58, 18, 0.7));
 }
 
 #battery.critical {
-  background: #aa092c;
+  background: linear-gradient(180deg, rgba(170, 9, 44, 1.0), rgba(170, 9, 44, 1.0) 30%, rgba(170, 9, 44, 0.7));
 }
 
 #clock {
@@ -42,7 +42,7 @@ tooltip {
 }
 
 #network {
-  background: #0a455c;
+  background: linear-gradient(180deg, rgba(18, 120, 161, 1.0), rgba(18, 120, 161, 1.0) 30%, rgba(18, 120, 161, 0.7));
 }
 
 #workspaces {
@@ -60,14 +60,13 @@ tooltip {
 }
 
 #workspaces button:hover {
-  color: white;
-  background: rgba(65, 34, 145, 0.4);
+  background: rgba(65, 34, 145, 0.25);
 }
 
 #workspaces button.visible {
   color: white;
   min-width: 40px;
-  background: #412291;
+  background: linear-gradient(180deg, rgba(65, 34, 145, 1.0), rgba(65, 34, 145, 1.0) 30%, rgba(65, 34, 145, 0.7));
 }
 
 #workspaces button.urgent {

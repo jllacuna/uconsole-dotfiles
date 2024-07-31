@@ -38,6 +38,9 @@ default_floating_border none
 titlebar_padding 1
 titlebar_border_thickness 0
 
+# Gaps between windows
+gaps inner 5
+
 #
 # Example configuration:
 #
@@ -58,9 +61,9 @@ titlebar_border_thickness 0
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
 exec swayidle -w \
-  timeout 300 'swaylock -f -i /home/jllacuna/.local/share/backgrounds/alexandra_daddario-1280x720.png' \
+  timeout 300 'swaylock --config /home/jllacuna/.config/swaylock/config' \
   timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-  before-sleep 'swaylock -f -i /home/jllacuna/.local/share/backgrounds/alexandra_daddario-1280x720.png'
+  before-sleep 'swaylock --config /home/jllacuna/.config/swaylock/config'
 
 ### Input configuration
 #

@@ -1,0 +1,24 @@
+daemonize
+image=/home/jllacuna/.local/share/backgrounds/alexandra_daddario-1280x720.png
+bs-hl-color=aa092c
+caps-lock-bs-hl-color=aa092c
+caps-lock-key-hl-color=0a5c21
+font=Hack Nerd Font
+font-size=20
+indicator-radius=75
+inside-color=12a13a80
+inside-clear-color=c7e28380
+inside-ver-color=75cdf080
+inside-wrong-color=aa092c80
+key-hl-color=0a5c21
+line-uses-inside
+ring-color=12a13acd
+ring-clear-color=c7e283
+ring-ver-color=75cdf0
+ring-wrong-color=aa092c
+separator-color=12a13a80
+text-color=242424
+text-clear-color=242424
+text-caps-lock-color=ffffff
+text-ver-color=242424
+text-wrong-color=ffffff
