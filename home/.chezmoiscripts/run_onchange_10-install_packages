@@ -20,5 +20,7 @@ Pin-Priority: 1000
 # -------
 
 sudo apt update
-sudo apt install -y sway waybar swayidle swaylock wezterm firefox wlogout
+sudo apt install -y sway swayidle swaylock waybar wlogout \
+  wezterm firefox \
+  keychain
 sudo apt install --fix-broken
