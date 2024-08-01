@@ -2,7 +2,7 @@
   "layer": "bottom",
   "modules-left": [ "clock", "sway/mode" ],
   "modules-center": [ "sway/workspaces" ],
-  "modules-right": [ "network", "battery" ],
+  "modules-right": [ "network", "battery", "custom/power" ],
   "battery": {
     "format": "{capacity}% {icon}",
     "format-charging": "{capacity}% 󱐋 {icon}",
@@ -20,6 +20,11 @@
     "format-calendar-weeks": "<span color='#595959'><b>{}</b></span>",
     "today-format": "<span color='#f075cd'><b>{}</b></span>",
     "calendar-weeks-pos": "right"
+  },
+  "custom/power": {
+    "format": "",
+    "on-click": "wlogout --protocol layer-shell --buttons-per-row 2",
+    "tooltip": false
   },
   "network": {
     "format": "{ifname}",

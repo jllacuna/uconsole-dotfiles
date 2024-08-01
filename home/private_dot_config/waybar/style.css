@@ -32,6 +32,12 @@ tooltip {
   padding: 0 10px;
 }
 
+#custom-power {
+  font-size: 1.8rem;
+  padding: 0 15px 0 10px;
+  margin: 5px 5px 5px 0;
+}
+
 #mode {
   color: #fbaabb;
   font-size: 1.2rem;

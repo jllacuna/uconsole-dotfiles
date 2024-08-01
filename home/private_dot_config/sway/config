@@ -61,9 +61,9 @@ gaps inner 5
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
 exec swayidle -w \
-  timeout 300 'swaylock --config /home/jllacuna/.config/swaylock/config' \
+  timeout 300 'swaylock' \
   timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-  before-sleep 'swaylock --config /home/jllacuna/.config/swaylock/config'
+  before-sleep 'swaylock'
 
 ### Input configuration
 #
@@ -106,10 +106,10 @@ exec swayidle -w \
     bindsym $mod+Shift+c reload
 
     # Show lock screen
-    bindsym $mod+Escape exec swaylock -f -i /home/jllacuna/.local/share/backgrounds/alexandra_daddario-1280x720.png
+    bindsym $mod+Escape exec swaylock
 
-    # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+    # Show logout screen
+    bindsym $mod+Shift+e exec wlogout --protocol layer-shell --buttons-per-row 2
 #
 # Moving around:
 #
