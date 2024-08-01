@@ -1,0 +1,4 @@
+Host *
+  AddKeysToAgent yes
+
+Include ~/.ssh/conf.d/*
