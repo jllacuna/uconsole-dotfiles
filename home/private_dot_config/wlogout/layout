@@ -11,7 +11,7 @@
   "keybind": "r"
 }
 {
-  "label": "logout",
+  "label": "exit",
   "action": "swaymsg exit",
   "text": "(E)xit Sway",
   "keybind": "e"
