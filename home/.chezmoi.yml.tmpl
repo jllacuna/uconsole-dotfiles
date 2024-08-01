@@ -1,2 +1,13 @@
+{{ $fullName := promptString "Full name" -}}
+{{ $bitbucketEmail := promptString "Bitbucket email" -}}
+{{ $bitbucketSubdomain := promptString "Bitbucket subdomain" -}}
+{{ $githubEmail := promptString "Github private email" -}}
 data:
+  fullName: {{ $fullName }}
   nerdFont: Hack
+  git:
+    bitbucket:
+      email: {{ $bitbucketEmail }}
+      subdomain: {{ $bitbucketSubdomain }}
+    github:
+      email: {{ $githubEmail }}

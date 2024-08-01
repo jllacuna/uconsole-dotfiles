@@ -1,0 +1,23 @@
+[include]
+  path = ~/.config/git/alias
+  path = ~/.config/git/user
+[includeIf "hasconfig:remote.*.url:*github.com*/**"]
+  path = ~/.config/git/github/config
+[includeIf "hasconfig:remote.*.url:*bitbucket.org*/**"]
+  path = ~/.config/git/bitbucket/config
+[core]
+  editor = nvim
+[init]
+  defaultBranch = main
+[push]
+  default = matching
+[pull]
+  rebase = false
+[merge]
+  tool = nvim -d
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+[help]
+  autocorrect = 1

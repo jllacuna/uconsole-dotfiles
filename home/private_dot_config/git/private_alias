@@ -1,0 +1,23 @@
+[alias]
+  a = add
+  b = branch
+  bd = branch -d
+  c = commit
+  ca = commit -a
+  cm = commit -m
+  cam = commit -am
+  co = checkout
+  cob = checkout -b
+  d = diff
+  dc = !clear && git diff --cached
+  m = merge --no-ff --no-commit
+  pl = pull
+  pls = pull -s subtree
+  ps = push
+  r = remote -v
+  ra = rebase --abort
+  rc = rebase --continue
+  s = status
+  showtracking = remote show origin
+  graph = log --color --graph --date-order -C -M --pretty=format:\"<%Cred%h%Creset> %ad %C(blue)[%an]%Creset %Cgreen%d%Creset %s %C(yellow)(%cr)%Creset\" --all --date=short --abbrev-commit
+  stale = !git checkout main && git pull && git remote prune origin && git branch -a --merged
