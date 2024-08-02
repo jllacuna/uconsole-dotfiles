@@ -1,0 +1,25 @@
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt autocd extendedglob
+bindkey -v
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/jllacuna/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+# Map zsh HOST to bash HOSTNAME
+# https://unix.stackexchange.com/a/209394
+HOSTNAME=$HOST
+
+# WARNING: fzf-tab needs to be loaded after compinit but before syntax highlighting and autosuggestions
+# https://github.com/Aloxaf/fzf-tab?tab=readme-ov-file#install
+source ~/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
+
+source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/plugins/alias-tips/alias-tips.plugin.zsh
