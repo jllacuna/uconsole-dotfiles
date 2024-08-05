@@ -1,9 +1,14 @@
 # Debug waybar
 # GTK_DEBUG="interactive waybar"; export GTK_DEBUG
 
+export PATH=$PATH:~/.local/bin
+
 # Use keychain to start up ssh-agent
 /usr/bin/keychain --clear --timeout 60
 source $HOME/.keychain/$HOSTNAME-sh
+
+# Oh My Posh
+eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/themes/jellybeans.omp.yml)"
 
 # Start sway on login
 [ "$(tty)" = "/dev/tty1" ] && exec sway
