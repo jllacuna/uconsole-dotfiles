@@ -5,17 +5,18 @@ console_title_template: "{{ .Pwd }}"
 palette:
   light-purple: "#c6b6ee"
   fuschia: "#a11278"
-  mid-orange: "#f09875"
   light-yellow: "#deeeb6"
-  mid-yellow: "#c7e283"
   mid-green: "#75f098"
   green: "#12a13a"
+  dark-green: "#0a5c21"
   mid-blue: "#75cdf0"
   white: "#fff"
   light-grey: "#d1d1d1"
   grey: "#595959"
   dark-grey: "#242424"
+  mid-red: "#f76e8b"
   red: "#aa092c"
+  dark-red: "#610519"
 transient_prompt:
   foreground: p:mid-green
   template: "\u276f "
@@ -74,8 +75,8 @@ blocks:
         alias: GitWorking
         style: powerline
         powerline_symbol: "\ue0b4"
-        foreground: p:red
-        background: p:mid-orange
+        foreground: p:dark-red
+        background: p:mid-red
         template: "{{ if .Working.Changed }} <p:dark-grey><b>\uf448</b></> {{ .Working.String }}{{ end }}"
         properties:
           fetch_status: true
@@ -83,8 +84,8 @@ blocks:
         alias: GitStaging
         style: powerline
         powerline_symbol: "\ue0b4"
-        foreground: p:green
-        background: p:mid-yellow
+        foreground: p:dark-green
+        background: p:mid-green
         template: "{{ if .Staging.Changed }} <p:dark-grey><b>\uf0c7</b></> {{ .Staging.String }}{{ end }}"
         properties:
           fetch_status: true
