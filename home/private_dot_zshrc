@@ -16,7 +16,15 @@ compinit
 # https://unix.stackexchange.com/a/209394
 HOSTNAME=$HOST
 
+# ~/.local/bin for Oh My Posh
 export PATH=$PATH:~/.local/bin
+
+# Display fzf top-down
+export FZF_DEFAULT_OPTS="--layout=reverse"
+
+# Set up fzf key bindings and fuzzy completion
+fzf_rc="${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+[ -f $fzf_rc ] && source $fzf_rc
 
 # Oh My Posh
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/jellybeans.omp.yml)"

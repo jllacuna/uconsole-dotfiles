@@ -1,11 +1,19 @@
 # Debug waybar
 # GTK_DEBUG="interactive waybar"; export GTK_DEBUG
 
+# ~/.local/bin for Oh My Posh
 export PATH=$PATH:~/.local/bin
+
+# Display fzf top-down
+export FZF_DEFAULT_OPTS="--layout=reverse"
 
 # Use keychain to start up ssh-agent
 /usr/bin/keychain --clear --timeout 60
 source $HOME/.keychain/$HOSTNAME-sh
+
+# Set up fzf key bindings and fuzzy completion
+fzf_rc="${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
+[ -f $fzf_rc ] && source $fzf_rc
 
 # Oh My Posh
 eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/themes/jellybeans.omp.yml)"
