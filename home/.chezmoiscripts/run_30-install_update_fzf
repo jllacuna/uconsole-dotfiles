@@ -3,8 +3,14 @@
 DEST=~/.local/share/fzf
 
 if [ -d $DEST ]; then
-  echo "Updating fzf"
-  cd $DEST && git pull
+  cd $DEST && git fetch
+  if [[ $(git rev-parse '@') == $(git rev-parse '@{u}') ]]; then
+    echo 'fzf is up-to-date'
+    exit 0
+  else
+    echo 'Updating fzf'
+    git merge
+  fi
 else
   echo "Installing fzf"
   git clone --depth 1 https://github.com/junegunn/fzf.git $DEST
