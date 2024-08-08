@@ -5,7 +5,13 @@ DEST=~/.local/share/fzf
 if [ -d $DEST ]; then
   cd $DEST && git fetch
   if [[ $(git rev-parse '@') == $(git rev-parse '@{u}') ]]; then
-    echo 'fzf is up-to-date'
+    FZF_VERSION=$(fzf --version 2> /dev/null)
+    VERSION_REGEX='[0-9\.]+'
+
+    [[ $FZF_VERSION =~ $VERSION_REGEX ]]
+    CURRENT_TAG=${BASH_REMATCH[0]}
+
+    echo "fzf is up-to-date: v$CURRENT_TAG"
     exit 0
   else
     echo 'Updating fzf'
