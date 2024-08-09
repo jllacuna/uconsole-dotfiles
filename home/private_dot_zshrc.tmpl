@@ -31,6 +31,9 @@ export FZF_DEFAULT_OPTS="--layout=reverse"
 # Colorize man pages with bat
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
+# ripgrep config
+export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgrep/ripgreprc"
+
 # Use bat instead of cat
 alias cat='bat --paging=never'
 # Fuzzy find files and open them in editor (with preview)
