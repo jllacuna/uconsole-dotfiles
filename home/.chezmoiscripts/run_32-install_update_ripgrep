@@ -3,10 +3,8 @@
 REPO="https://github.com/BurntSushi/ripgrep"
 DEST=~/.local/share
 BIN=~/.local/bin
+MAN=~/.local/share/man/man1
 COMPLETION=~/.zsh/completion
-
-# manpath is calculated relative to path: https://man7.org/linux/man-pages/man5/manpath.5.html
-MAN=$(realpath -s "$BIN/../share/man/man1")
 
 # Get latest release version
 LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
