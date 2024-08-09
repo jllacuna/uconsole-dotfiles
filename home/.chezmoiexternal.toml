@@ -22,6 +22,11 @@
   exact = true
   stripComponents = 1
   refreshPeriod = "168h"
+[".zsh/completion/_fzf"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/lmburns/dotfiles/master/.config/zsh/completions/_fzf"
+  refreshPeriod = "168h"
 [".config/bat/themes/Boron.tmTheme"]
   type = "file"
   readonly = true

@@ -20,6 +20,8 @@ if [ "$TAG" = "$CURRENT_TAG" ]; then
   exit 0
 fi
 
+echo "Installing bat: v$TAG"
+
 curl --create-dirs --progress-bar -Lo $DEST/bat.deb $REPO/releases/download/v$TAG/bat_${TAG}_arm64.deb
 sudo dpkg -i $DEST/bat.deb
 rm $DEST/bat.deb
