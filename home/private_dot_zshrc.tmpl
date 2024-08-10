@@ -26,7 +26,7 @@ if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/bin* ]]; then
 fi
 
 # Display fzf top-down
-export FZF_DEFAULT_OPTS="--layout=reverse"
+export FZF_DEFAULT_OPTS="--layout=reverse --preview-window=down,border-top"
 
 # Colorize man pages with bat
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
@@ -36,12 +36,30 @@ export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgrep/ripgreprc"
 
 # Use bat instead of cat
 alias cat='bat --paging=never'
-# Fuzzy find files and open them in editor (with preview)
-alias ff='fzf --multi --bind "enter:become($EDITOR {+})" --preview "bat --color=always --style=numbers,changes --line-range=:200 {}" --preview-window "down,border-top"'
 # Tail systemd logs (with colors)
 alias syslog='journalctl -f | bat --paging=never -l log --style plain'
 # Format --help with bat
 alias -g -- --help='--help 2>&1 | bat -l help --style=plain'
+# Fuzzy find files (with preview) and open them in nvim
+alias ffv='fzf --multi --bind "f1:toggle-all" --bind "enter:become(nvim {+})" --preview "bat --color=always --style=numbers,changes --line-range=:200 {}"'
+
+# Search with ripgrep, select results with fzf (with preview), then open the selections in nvim quickfix
+fgv() {
+  selected=$(
+    rg --color=always --vimgrep --smart-case $@ |
+      fzf --multi \
+          --ansi \
+          --color "hl:-1:underline,hl+:-1:underline:reverse" \
+	  --delimiter : \
+          --preview 'bat --color=always --style=numbers,changes {1} --highlight-line={2}' \
+          --preview-window 'down,border-top,+{2}-4' \
+	  --bind "f1:toggle-all"
+  )
+
+  if [[ $selected != "" ]]; then
+    nvim +cw -q <(echo $selected)
+  fi
+}
 
 # Set up fzf key bindings and fuzzy completion
 fzf_rc="${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
