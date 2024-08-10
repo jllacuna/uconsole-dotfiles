@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Only run if the themes change
+{{ $themes := glob (joinPath .chezmoi.homeDir ".config" "bat" "themes" "*.tmTheme") }}
+{{- range $themes }}
+  {{- "#" }} {{ include . | sha256sum }} {{ . }}
+{{ end }}
+
+echo "Updating bat themes and syntax definitions"
+bat cache --build
