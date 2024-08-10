@@ -21,6 +21,7 @@ Pin-Priority: 1000
 
 sudo apt update
 sudo apt install -y zsh \
+  ninja-build cmake gettext \
   sway swayidle swaylock waybar wlogout \
   wezterm firefox \
   keychain

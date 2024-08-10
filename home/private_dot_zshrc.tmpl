@@ -6,11 +6,11 @@ setopt autocd extendedglob
 
 bindkey -v
 
-if (( ! $fpath[(I)/home/{{ .chezmoi.username }}/.zsh/completion] )); then
-  fpath+=(/home/{{ .chezmoi.username }}/.zsh/completion)
+if (( ! $fpath[(I){{ .chezmoi.homeDir }}/.zsh/completion] )); then
+  fpath+=({{ .chezmoi.homeDir }}/.zsh/completion)
 fi
 
-zstyle :compinstall filename '/home/{{ .chezmoi.username }}/.zshrc'
+zstyle :compinstall filename '{{ .chezmoi.homeDir }}/.zshrc'
 
 autoload -Uz compinit
 compinit
@@ -19,10 +19,10 @@ compinit
 # https://unix.stackexchange.com/a/209394
 HOSTNAME=$HOST
 
-export EDITOR=vi
+export EDITOR=nvim
 
-if [[ ! "$PATH" == */home/{{ .chezmoi.username }}/.local/bin* ]]; then
-  PATH="${PATH:+${PATH}:}/home/{{ .chezmoi.username }}/.local/bin"
+if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/bin* ]]; then
+  PATH="${PATH:+${PATH}:}{{ .chezmoi.homeDir }}/.local/bin"
 fi
 
 # Display fzf top-down
@@ -37,7 +37,7 @@ export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgrep/ripgreprc"
 # Use bat instead of cat
 alias cat='bat --paging=never'
 # Fuzzy find files and open them in editor (with preview)
-alias ff='fzf --multi --bind "enter:become($EDITOR {+})" --preview "bat --color=always --style=numbers,changes --line-range=:200 {}"'
+alias ff='fzf --multi --bind "enter:become($EDITOR {+})" --preview "bat --color=always --style=numbers,changes --line-range=:200 {}" --preview-window "down,border-top"'
 # Tail systemd logs (with colors)
 alias syslog='journalctl -f | bat --paging=never -l log --style plain'
 # Format --help with bat

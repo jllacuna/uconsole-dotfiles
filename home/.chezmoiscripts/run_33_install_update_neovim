@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+REPO="https://github.com/neovim/neovim"
+DEST=~/.local/share
+
+# Get latest release version
+LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
+REGEX='releases/tag/v([0-9\.]+)'
+
+[[ $LOCATION =~ $REGEX ]]
+TAG=${BASH_REMATCH[1]}
+
+NEOVIM_VERSION=$(nvim --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+[[ $NEOVIM_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "neovim is up-to-date: v$TAG"
+  exit 0
+fi
+
+echo "Installing neovim: v$TAG"
+
+curl --create-dirs --progress-bar -Lo $DEST/neovim.tar.gz $REPO/archive/refs/tags/v$TAG.tar.gz
+
+# Remove existing install
+rm -r $DEST/neovim 2> /dev/null
+
+# Extract the tarball
+cd $DEST && tar xvzf neovim.tar.gz --transform s/neovim-$TAG/neovim/ && rm neovim.tar.gz
+
+# Build and install
+cd $DEST/neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo && cd build && cpack -G DEB && sudo dpkg -i nvim-linux64.deb
