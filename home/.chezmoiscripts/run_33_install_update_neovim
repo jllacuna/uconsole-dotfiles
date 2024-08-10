@@ -25,7 +25,7 @@ echo "Installing neovim: v$TAG"
 curl --create-dirs --progress-bar -Lo $DEST/neovim.tar.gz $REPO/archive/refs/tags/v$TAG.tar.gz
 
 # Remove existing install
-rm -r $DEST/neovim 2> /dev/null
+rm -fr $DEST/neovim
 
 # Extract the tarball
 cd $DEST && tar xvzf neovim.tar.gz --transform s/neovim-$TAG/neovim/ && rm neovim.tar.gz

@@ -39,10 +39,10 @@ if [[ "$SHA256" != "$CHECKSUM" ]]; then
 fi
 
 # Remove existing install
-rm -r $DEST/ripgrep 2> /dev/null
-rm $BIN/rg 2> /dev/null
-rm $MAN/rg.1 2> /dev/null
-rm $COMPLETION/_rg 2> /dev/null
+rm -fr $DEST/ripgrep
+rm -f $BIN/rg
+rm -f $MAN/rg.1
+rm -f $COMPLETION/_rg
 
 # Extract the tarball
 cd $DEST && tar xvzf $FILE_STEM.tar.gz --transform s/$FILE_STEM/ripgrep/ && rm $FILE_STEM.tar.gz

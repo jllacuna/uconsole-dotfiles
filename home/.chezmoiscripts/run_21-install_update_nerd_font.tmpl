@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 FONT={{ .nerdFont | quote }}
+FOLDER="${FONT}_Nerd_Font"
 REPO="https://github.com/ryanoasis/nerd-fonts"
 DEST=~/.local/share/fonts
 
@@ -12,7 +13,7 @@ REGEX='releases/tag/(v[0-9\.]+)'
 TAG=${BASH_REMATCH[1]}
 
 # Get currently installed version, if any
-VERSION_FILE="$DEST/$FONT/VERSION"
+VERSION_FILE="$DEST/$FOLDER/VERSION"
 [ -e $VERSION_FILE ] && CURRENT_TAG=$(< $VERSION_FILE) || CURRENT_TAG=""
 
 if [ "$TAG" = "$CURRENT_TAG" ]; then
@@ -24,11 +25,11 @@ fi
 echo "Installing nerd font: $FONT $TAG"
 
 # Clean up existing font
-rm -fr $DEST/$FONT
+rm -fr $DEST/$FOLDER
 
 # Download and extract the font
 curl --create-dirs --progress-bar -Lo $DEST/$FONT.tar.xz $REPO/releases/download/$TAG/$FONT.tar.xz
-cd $DEST && mkdir $FONT && tar -xvJf $FONT.tar.xz -C $FONT && rm $FONT.tar.xz
+cd $DEST && mkdir $FOLDER && tar -xvJf $FONT.tar.xz -C $FOLDER && rm $FONT.tar.xz
 
 # Update font cache
 fc-cache -fv

@@ -38,7 +38,7 @@ blocks:
         foreground: p:mid-blue
         template: "{{ if not (.Segments.Contains \"GitRepo\") }}{{ .Path }} {{ end }}"
         properties:
-          home_icon: "\uf015  ~"
+          home_icon: "\uf015 ~"
           style: full
       - type: git
         alias: GitRepo
@@ -55,7 +55,7 @@ blocks:
         alias: GitPath
         style: plain
         foreground: p:mid-blue
-        template: "{{ if ne .Dir .PWD }}\uf1d2 {{ trimPrefix (print .Dir \"/\") .PWD }} {{ end }}"
+        template: "{{ if ne .Dir .PWD }}\ue702 {{ trimPrefix (print .Dir \"/\") .PWD }} {{ end }}"
   - type: prompt
     alignment: right
     segments:
