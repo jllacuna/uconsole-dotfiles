@@ -19,7 +19,7 @@ palette:
   dark-red: "#610519"
 transient_prompt:
   foreground: p:mid-green
-  template: "\u276f "
+  template: "<p:mid-blue>\u203a</>\u276f "
 secondary_prompt:
   foreground: p:grey
   template: "󱦰 "
@@ -27,6 +27,10 @@ blocks:
   - type: prompt
     alignment: left
     segments:
+      - type: text
+        style: plain
+        foreground: p:mid-green
+        template: "\u256d\u2500 "
       # If connected via SSH, display username and hostname
       - type: session
         style: plain
@@ -104,4 +108,4 @@ blocks:
       - type: text
         style: plain
         foreground: p:mid-green
-        template: "\u276f"
+        template: "\u2570\u276f"
