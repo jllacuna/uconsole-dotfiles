@@ -10,11 +10,6 @@ if (( ! $fpath[(I){{ .chezmoi.homeDir }}/.zsh/completion] )); then
   fpath+=({{ .chezmoi.homeDir }}/.zsh/completion)
 fi
 
-zstyle :compinstall filename '{{ .chezmoi.homeDir }}/.zshrc'
-
-autoload -Uz compinit
-compinit
-
 # Map zsh HOST to bash HOSTNAME
 # https://unix.stackexchange.com/a/209394
 HOSTNAME=$HOST
@@ -25,6 +20,9 @@ if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/bin* ]]; then
   PATH="${PATH:+${PATH}:}{{ .chezmoi.homeDir }}/.local/bin"
 fi
 
+# Colors for ls, tree, fd, etc.
+export LS_COLORS="$(vivid generate jellybeans)"
+
 # Display fzf top-down
 export FZF_DEFAULT_OPTS="--layout=reverse --preview-window=down,border-top"
 
@@ -34,6 +32,18 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 # ripgrep config
 export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgrep/ripgreprc"
 
+zstyle :compinstall filename '{{ .chezmoi.homeDir }}/.zshrc'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+autoload -Uz compinit
+compinit
+
+# Show colors by default with ls
+alias ls='ls --color=auto'
+# Show all files in long format with block size
+alias ll='ls -lsa'
+# Output file listing in tree format
+alias as-tree='tree --fromfile'
 # Use bat instead of cat
 alias cat='bat --paging=never'
 # Tail systemd logs (with colors)

@@ -24,5 +24,5 @@ sudo apt install -y zsh \
   ninja-build cmake gettext \
   sway swayidle swaylock waybar wlogout \
   wezterm firefox \
-  keychain
+  keychain tree
 sudo apt install --fix-broken
