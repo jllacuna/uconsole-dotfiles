@@ -23,8 +23,18 @@ fi
 # Colors for ls, tree, fd, etc.
 export LS_COLORS="$(vivid generate jellybeans)"
 
-# Display fzf top-down
-export FZF_DEFAULT_OPTS="--layout=reverse --preview-window=down,border-top"
+# Use fd to traverse the file system
+export FZF_DEFAULT_COMMAND='fd --type file --type dir --type symlink --color always --hidden --follow --exclude .git'
+# Display fzf top-down with colors
+# WARNING: --ansi may slow down performance: https://github.com/junegunn/fzf#performance
+export FZF_DEFAULT_OPTS="--ansi --layout=reverse --preview-window=down,border-top"
+
+# Use fd for CTRL-T
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Use fd for ALT-C, and preview the directory with tree
+export FZF_ALT_C_COMMAND='fd --type dir --color always --hidden --follow --exclude .git'
+export FZF_ALT_C_OPTS='--preview "tree -C {} | head -200"'
 
 # Colorize man pages with bat
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
@@ -51,14 +61,13 @@ alias syslog='journalctl -f | bat --paging=never -l log --style plain'
 # Format --help with bat
 alias -g -- --help='--help 2>&1 | bat -l help --style=plain'
 # Fuzzy find files (with preview) and open them in nvim
-alias ffv='fzf --multi --bind "f1:toggle-all" --bind "enter:become(nvim {+})" --preview "bat --color=always --style=numbers,changes --line-range=:200 {}"'
+alias ffv='fd --type file --color always --hidden --exclude .git | fzf --multi --bind "f1:toggle-all" --bind "enter:become(nvim {+})" --preview "bat --color=always --style=numbers,changes --line-range=:200 {}"'
 
 # Search with ripgrep, select results with fzf (with preview), then open the selections in nvim quickfix
 fgv() {
   selected=$(
     rg --color=always --vimgrep --smart-case $@ |
       fzf --multi \
-          --ansi \
           --color "hl:-1:underline,hl+:-1:underline:reverse" \
 	  --delimiter : \
           --preview 'bat --color=always --style=numbers,changes {1} --highlight-line={2}' \
