@@ -1,25 +1,34 @@
 #!/usr/bin/env bash
 
+REPO=https://github.com/junegunn/fzf
 DEST=~/.local/share/fzf
 
+# Get latest release version
+LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
+REGEX='releases/tag/v([0-9\.]+)'
+
+[[ $LOCATION =~ $REGEX ]]
+TAG=${BASH_REMATCH[1]}
+
+FZF_VERSION=$(fzf --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+
+[[ $FZF_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "fzf is up-to-date: v$TAG"
+  exit 0
+fi
+
 if [ -d $DEST ]; then
-  cd $DEST && git fetch
-  if [[ $(git rev-parse '@') == $(git rev-parse '@{u}') ]]; then
-    FZF_VERSION=$(fzf --version 2> /dev/null)
-    VERSION_REGEX='[0-9\.]+'
+  echo "Updating fzf: v$TAG"
 
-    [[ $FZF_VERSION =~ $VERSION_REGEX ]]
-    CURRENT_TAG=${BASH_REMATCH[0]}
-
-    echo "fzf is up-to-date: v$CURRENT_TAG"
-    exit 0
-  else
-    echo 'Updating fzf'
-    git merge
-  fi
+  cd $DEST && git pull
 else
-  echo "Installing fzf"
-  git clone --depth 1 https://github.com/junegunn/fzf.git $DEST
+  echo "Installing fzf: v$TAG"
+
+  git clone --depth 1 $REPO.git $DEST
 fi
 
 $DEST/install --xdg --key-bindings --completion --no-update-rc
