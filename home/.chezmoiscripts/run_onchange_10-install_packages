@@ -16,6 +16,10 @@ Pin: origin packages.mozilla.org
 Pin-Priority: 1000
 ' | sudo tee /etc/apt/preferences.d/mozilla
 
+# eza
+wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /usr/share/keyrings/gierens.gpg
+echo "deb [signed-by=/usr/share/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+
 # Install
 # -------
 
@@ -24,5 +28,5 @@ sudo apt install -y zsh \
   ninja-build cmake gettext \
   sway swayidle swaylock waybar wlogout \
   wezterm firefox \
-  keychain tree
+  keychain tree eza
 sudo apt install --fix-broken

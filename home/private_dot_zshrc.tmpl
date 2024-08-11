@@ -49,9 +49,10 @@ autoload -Uz compinit
 compinit
 
 # Show colors by default with ls
-alias ls='ls --color=auto'
-# Show all files in long format with block size
-alias ll='ls -lsa'
+alias ls='eza --icons always'
+# Show all files in long format
+alias ll='ls -la'
+alias lt='eza --icons always -la --tree --level 5 --ignore-glob ".git"'
 # Output file listing in tree format
 alias as-tree='tree --fromfile'
 # Use bat instead of cat

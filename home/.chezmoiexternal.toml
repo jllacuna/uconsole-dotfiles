@@ -27,6 +27,11 @@
   readonly = true
   url = "https://raw.githubusercontent.com/lmburns/dotfiles/master/.config/zsh/completions/_fzf"
   refreshPeriod = "168h"
+[".zsh/completion/_eza"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/eza-community/eza/main/completions/zsh/_eza"
+  refreshPeriod = "168h"
 [".config/bat/themes/Boron.tmTheme"]
   type = "file"
   readonly = true
