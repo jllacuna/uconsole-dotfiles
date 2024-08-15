@@ -1,0 +1,22 @@
+# Search with ripgrep, select results with fzf (with preview), then open the selections in nvim quickfix
+fgv() {
+  selected=$(
+    rg --color=always --vimgrep --smart-case $@ |
+      fzf --multi \
+          --color "hl:-1:underline,hl+:-1:underline:reverse" \
+	  --delimiter : \
+          --preview 'bat --color=always --style=numbers,changes {1} --highlight-line={2}' \
+          --preview-window 'down,border-top,+{2}-4' \
+	  --bind "f1:toggle-all"
+  )
+
+  if [[ $selected != "" ]]; then
+    nvim +cw -q <(echo $selected)
+  fi
+}
+
+# "Warp" to named directories
+# https://github.com/mfaerevaag/wd
+wd() {
+  . ~/.local/share/wd/wd.sh
+}

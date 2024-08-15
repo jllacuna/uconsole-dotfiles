@@ -42,6 +42,9 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 # ripgrep config
 export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgrep/ripgreprc"
 
+# wd config
+export WD_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/wd/warprc"
+
 zstyle :compinstall filename '{{ .chezmoi.homeDir }}/.zshrc'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
@@ -65,22 +68,12 @@ alias -g -- --help='--help 2>&1 | bat -l help --style=plain'
 # Fuzzy find files (with preview) and open them in nvim
 alias ffv='fd --type file --color always --hidden --exclude .git | fzf --multi --bind "f1:toggle-all" --bind "enter:become(nvim {+})" --preview "bat --color=always --style=numbers,changes --line-range=:200 {}"'
 
-# Search with ripgrep, select results with fzf (with preview), then open the selections in nvim quickfix
-fgv() {
-  selected=$(
-    rg --color=always --vimgrep --smart-case $@ |
-      fzf --multi \
-          --color "hl:-1:underline,hl+:-1:underline:reverse" \
-	  --delimiter : \
-          --preview 'bat --color=always --style=numbers,changes {1} --highlight-line={2}' \
-          --preview-window 'down,border-top,+{2}-4' \
-	  --bind "f1:toggle-all"
-  )
-
-  if [[ $selected != "" ]]; then
-    nvim +cw -q <(echo $selected)
-  fi
-}
+# aliases to make wd feel like bashmarks
+alias g='wd'
+alias s='wd add'
+alias d='wd rm'
+alias l='wd list'
+alias p='wd path'
 
 # Set up fzf key bindings and fuzzy completion
 fzf_rc="${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
