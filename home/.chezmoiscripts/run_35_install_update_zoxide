@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+REPO=https://github.com/ajeetdsouza/zoxide
+
+# Get latest release version
+LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
+REGEX='releases/tag/v([0-9\.]+)'
+
+[[ $LOCATION =~ $REGEX ]]
+TAG=${BASH_REMATCH[1]}
+
+ZOXIDE_VERSION=$(zoxide --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+
+[[ $ZOXIDE_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "zoxide is up-to-date: v$TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing zoxide: v$TAG"
+else
+  echo "Updating zoxide: v$TAG"
+fi
+
+curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash

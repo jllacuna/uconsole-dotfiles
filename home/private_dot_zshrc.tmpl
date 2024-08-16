@@ -45,6 +45,9 @@ export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgrep/ripgreprc"
 # wd config
 export WD_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/wd/warprc"
 
+# zoxide config -- Use eza to preview directories when using fzf to find a directory
+export _ZO_FZF_OPTS="--ansi --layout=reverse --height=~50% --preview='eza --color=always --icons always --grid {2}' --preview-window=down,border-top"
+
 zstyle :compinstall filename '{{ .chezmoi.homeDir }}/.zshrc'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
@@ -78,6 +81,9 @@ alias p='wd path'
 # Set up fzf key bindings and fuzzy completion
 fzf_rc="${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 [ -f $fzf_rc ] && source $fzf_rc
+
+# zoxide completions
+eval "$(zoxide init zsh)"
 
 # Oh My Posh
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/jellybeans.omp.yml)"
