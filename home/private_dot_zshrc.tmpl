@@ -56,10 +56,10 @@ compinit
 
 alias clr='clear'
 # Show colors by default with ls
-alias ls='eza --icons always'
+alias ls='eza --icons always --color=always'
 # Show all files in long format
-alias ll='ls -la'
-alias lt='eza --icons always -la --tree --level 5 --ignore-glob ".git"'
+alias ll='ls -laa'
+alias lt='ls -la --tree --level 5 --ignore-glob ".git"'
 # Output file listing in tree format
 alias as-tree='tree --fromfile'
 # Use bat instead of cat

@@ -32,6 +32,16 @@
   readonly = true
   url = "https://raw.githubusercontent.com/eza-community/eza/main/completions/zsh/_eza"
   refreshPeriod = "168h"
+[".local/share/bash-completion/completions/git"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash"
+  refreshPeriod = "168h"
+[".zsh/completion/_git"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh"
+  refreshPeriod = "168h"
 [".config/bat/themes/Boron.tmTheme"]
   type = "file"
   readonly = true
