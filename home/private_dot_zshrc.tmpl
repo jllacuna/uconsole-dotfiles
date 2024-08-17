@@ -91,6 +91,10 @@ eval "$(zoxide init zsh)"
 # Oh My Posh
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/jellybeans.omp.yml)"
 
+# nvm
+export NVM_DIR="$HOME/.local/share/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
 # WARNING: fzf-tab needs to be loaded after compinit but before syntax highlighting and autosuggestions
 # https://github.com/Aloxaf/fzf-tab?tab=readme-ov-file#install
 source ~/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh

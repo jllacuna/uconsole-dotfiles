@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+PROJECT="nvm-sh/nvm"
+REPO="https://github.com/$PROJECT"
+DEST=~/.local/share/nvm
+
+# Get latest release version
+LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
+REGEX='releases/tag/v([0-9\.]+)'
+
+[[ $LOCATION =~ $REGEX ]]
+TAG=${BASH_REMATCH[1]}
+
+NVM_VERSION=$(. $DEST/nvm.sh 2> /dev/null && nvm --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+
+[[ $NVM_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "nvm is up-to-date: v$TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing nvm: v$TAG"
+else
+  echo "Updating nvm: v$TAG"
+fi
+
+# Install nvm
+mkdir -p $DEST
+PROFILE=/dev/null bash -c "curl -o- --progress-bar https://raw.githubusercontent.com/$PROJECT/v$TAG/install.sh | NVM_DIR=$DEST bash"
+
+# Install latest version of node and npm if this is the first time installing nvm
+if [ -z "$CURRENT_TAG" ]; then
+  echo 'Installing latest node'
+fi
+
+. $DEST/nvm.sh && nvm install node --latest-npm
