@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+DOWNLOAD="https://go.dev/dl"
+DEST=~/.local/share
+
+# Get latest release version
+DATA=$(curl -Ls $DOWNLOAD/?mode=json)
+TAG=$(echo $DATA | jq -r '.[0].version')
+
+GO_VERSION=$(go version 2> /dev/null)
+VERSION_REGEX='go[0-9\.]+'
+[[ $GO_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "golang is up-to-date: $TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing golang: $TAG"
+else
+  echo "Updating golang: $TAG"
+fi
+
+FILENAME=$(echo $DATA | jq -r '.[0].files[] | select(.arch=="arm64" and .os=="linux").filename')
+CHECKSUM=$(echo $DATA | jq -r '.[0].files[] | select(.arch=="arm64" and .os=="linux").sha256')
+
+curl --create-dirs --progress-bar -Lo $DEST/$FILENAME $DOWNLOAD/$FILENAME
+
+# Validate the checksum
+SHA256=$(sha256sum $DEST/$FILENAME | cut -d " " -f 1)
+
+if [[ "$SHA256" != "$CHECKSUM" ]]; then
+  echo "golang checksums do NOT match"
+  rm $DEST/$FILENAME
+  exit 1
+fi
+
+# Remove existing install
+rm -fr $DEST/go
+
+# Extract the tarball
+cd $DEST && tar xvzf $FILENAME && rm $FILENAME

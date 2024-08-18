@@ -20,6 +20,10 @@ if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/bin* ]]; then
   PATH="${PATH:+${PATH}:}{{ .chezmoi.homeDir }}/.local/bin"
 fi
 
+if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/share/go/bin* ]]; then
+  PATH="${PATH:+${PATH}:}{{ .chezmoi.homeDir }}/.local/share/go/bin"
+fi
+
 # Colors for ls, tree, fd, etc.
 export LS_COLORS="$(vivid generate jellybeans)"
 
