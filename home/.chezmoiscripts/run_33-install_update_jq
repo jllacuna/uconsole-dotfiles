@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+REPO="https://github.com/jqlang/jq"
+BIN=~/.local/bin
+
+# Get latest release version
+LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
+REGEX='releases/tag/jq-([0-9\.]+)'
+
+[[ $LOCATION =~ $REGEX ]]
+TAG=${BASH_REMATCH[1]}
+
+JQ_VERSION=$(jq --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+[[ $JQ_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "jq is up-to-date: v$TAG"
+  exit 0
+fi
+
+echo "Installing jq: v$TAG"
+
+curl --create-dirs --progress-bar -Lo $BIN/jq $REPO/releases/download/jq-$TAG/jq-linux-arm64
+chmod 755 $BIN/jq

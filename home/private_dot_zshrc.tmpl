@@ -48,6 +48,9 @@ export WD_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/wd/warprc"
 # zoxide config -- Use eza to preview directories when using fzf to find a directory
 export _ZO_FZF_OPTS="--ansi --layout=reverse --height=~50% --preview='eza --color=always --icons always --grid {2}' --preview-window=down,border-top"
 
+# jq colors
+export JQ_COLORS="38;5;242:38;5;52:38;5;22:38;5;203:38;5;35:38;5;254:38;5;254:38;5;39"
+
 zstyle :compinstall filename '{{ .chezmoi.homeDir }}/.zshrc'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
