@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+REPO="https://github.com/charmbracelet/glow"
+DEST=~/.local/share
+
+# Get latest release version
+LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
+REGEX='releases/tag/v([0-9\.]+)'
+
+[[ $LOCATION =~ $REGEX ]]
+TAG=${BASH_REMATCH[1]}
+
+GLOW_VERSION=$(glow --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+[[ $GLOW_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "glow is up-to-date: v$TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing glow: v$TAG"
+else
+  echo "Updating glow: v$TAG"
+fi
+
+FILENAME="glow_${TAG}_arm64.deb"
+curl --create-dirs --progress-bar -Lo $DEST/$FILENAME $REPO/releases/download/v$TAG/$FILENAME
+
+# Validate the checksum
+SHA256=$(cd $DEST && sha256sum $FILENAME)
+CHECKSUM=$(curl -sL $REPO/releases/download/v$TAG/checksums.txt | grep $FILENAME)
+
+if [[ "$SHA256" != "$CHECKSUM" ]]; then
+  echo "glow checksums do NOT match"
+  rm $DEST/$FILENAME
+  exit 1
+fi
+
+sudo dpkg -i $DEST/$FILENAME
+rm $DEST/$FILENAME
