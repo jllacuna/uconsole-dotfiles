@@ -99,8 +99,12 @@ eval "$(zoxide init zsh)"
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/jellybeans.omp.yml)"
 
 # nvm
-export NVM_DIR="$HOME/.local/share/nvm"
+export NVM_DIR="{{ .chezmoi.homeDir }}/.local/share/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# pyenv
+export PYENV_ROOT="{{ .chezmoi.homeDir }}/.local/share/pyenv"
+eval "$(pyenv init -)"
 
 # WARNING: fzf-tab needs to be loaded after compinit but before syntax highlighting and autosuggestions
 # https://github.com/Aloxaf/fzf-tab?tab=readme-ov-file#install

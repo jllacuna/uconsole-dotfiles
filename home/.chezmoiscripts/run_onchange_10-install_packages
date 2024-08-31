@@ -17,7 +17,7 @@ Pin-Priority: 1000
 ' | sudo tee /etc/apt/preferences.d/mozilla
 
 # eza
-wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /usr/share/keyrings/gierens.gpg
+wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --yes --dearmor -o /usr/share/keyrings/gierens.gpg
 echo "deb [signed-by=/usr/share/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
 
 # Install
@@ -25,6 +25,10 @@ echo "deb [signed-by=/usr/share/keyrings/gierens.gpg] http://deb.gierens.de stab
 
 sudo apt update
 sudo apt install -y zsh \
+  build-essential libssl-dev zlib1g-dev llvm \
+  libbz2-dev libreadline-dev libsqlite3-dev \
+  libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev \
+  python3-pip \
   ninja-build cmake gettext \
   sway swayidle swaylock waybar wlogout wl-clipboard \
   wezterm firefox \

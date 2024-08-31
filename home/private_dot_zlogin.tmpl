@@ -5,5 +5,9 @@
 /usr/bin/keychain --clear --timeout 60
 source $HOME/.keychain/$HOSTNAME-sh
 
+# pyenv
+export PYENV_ROOT="{{ .chezmoi.homeDir }}/.local/share/pyenv"
+eval "$(pyenv init -)"
+
 # Start sway on login
 [ "$(tty)" = "/dev/tty1" ] && exec sway
