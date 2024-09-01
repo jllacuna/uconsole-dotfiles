@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+pip install trash-cli 'trash-cli[completion]'
+
+# Set up completions
+cmds=(trash-empty trash-list trash-restore trash-put trash)
+for cmd in ${cmds[@]}; do
+  $cmd --print-completion bash | sudo tee /usr/share/bash-completion/completions/$cmd
+  $cmd --print-completion zsh | sudo tee /usr/share/zsh/site-functions/_$cmd
+done
