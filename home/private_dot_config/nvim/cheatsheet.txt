@@ -1,0 +1,26 @@
+Start alignment                | ga
+Start alignment with preview   | gA
+Jump to definition             | gd
+Find references                | gr
+Show type under cursor         | K
+Show diagnostic under cursor   | gl
+Next diagnostic                | ]d
+Previous diagnostic            | [d
+Toggle blame current line      | <leader>hb
+Next git hunk                  | ]c
+Previous git hunk              | [c
+Toggle symbol outline          | <leader>o
+Toggle colorizing color values | <leader>co
+Rename symbol                  | <leader>rn
+Show code action               | <leader>ca
+Render Markdown                | <leader>m
+Preview Markdown               | <leader>mp
+Find files                     | <leader>ff
+Live grep                      | <leader>fg
+Find help tags                 | <leader>fh
+Find TODOs                     | <leader>ft
+Find diagnostics               | <leader>fd
+Find changes (git)             | <leader>fc
+Find word under cursor         | <leader>fw
+Search and insert Nerd fonts   | <leader>fn
+Close buffer (keep window)     | <leader>bd
