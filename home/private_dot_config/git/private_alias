@@ -8,7 +8,7 @@
   cam = commit -am
   co = checkout
   cob = checkout -b
-  d = !git diff --name-only --relative --diff-filter=d | xargs bat --diff
+  d = diff
   dc = !clear && git diff --cached
   m = merge --no-ff --no-commit
   pl = pull
