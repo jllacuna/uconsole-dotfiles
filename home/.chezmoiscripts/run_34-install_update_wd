@@ -44,6 +44,6 @@ mkdir -p $MAN && cd $MAN && ln -s $DEST/wd.1 wd.1
 mkdir -p $COMPLETION && cd $COMPLETION && ln -s $DEST/_wd.sh _wd.sh
 
 # Set up some warp points
-$DEST/wd.sh addcd ~/.local/share/chezmoi
-mkdir -p ~/working && $DEST/wd.sh addcd ~/working ing
-mkdir -p ~/workspace && $DEST/wd.sh addcd ~/workspace space
+$DEST/wd.sh addcd --force ~/.local/share/chezmoi
+mkdir -p ~/working && $DEST/wd.sh addcd --force ~/working ing
+mkdir -p ~/workspace && $DEST/wd.sh addcd --force ~/workspace space
