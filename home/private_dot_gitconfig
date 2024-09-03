@@ -5,19 +5,44 @@
   path = ~/.config/git/github/config
 [includeIf "hasconfig:remote.*.url:*bitbucket.org*/**"]
   path = ~/.config/git/bitbucket/config
-[core]
-  editor = nvim
-[init]
-  defaultBranch = main
-[push]
-  default = matching
-[pull]
-  rebase = false
-[merge]
-  tool = nvim -d
 [color]
   diff = auto
   status = auto
   branch = auto
+[core]
+  editor = nvim
+  pager = delta
+[delta]
+  navigate = true
+  line-numbers = true
+  hyperlinks = true
+  features = boron
+[delta "boron"]
+  syntax-theme = Boron
+[delta "zebra-dark"]
+  minus-style = syntax "#330f0f"
+  minus-emph-style = syntax "#4f1917"
+  plus-style = syntax "#0e2f19"
+  plus-emph-style = syntax "#174525"
+  map-styles = \
+    bold purple => syntax "#330f29", \
+    bold blue => syntax "#271344", \
+    bold cyan => syntax "#0d3531", \
+    bold yellow => syntax "#222f14"
+  zero-style = syntax
+  whitespace-error-style = "#aaaaaa"
+[diff]
+  colorMoved = default
 [help]
   autocorrect = 1
+[init]
+  defaultBranch = main
+[interactive]
+  diffFilter = delta --color-only
+[merge]
+  tool = nvim -d
+  conflictstyle = diff3
+[pull]
+  rebase = false
+[push]
+  default = matching

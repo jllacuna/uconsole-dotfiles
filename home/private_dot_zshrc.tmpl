@@ -7,7 +7,7 @@ setopt autocd extendedglob
 bindkey -v
 
 if (( ! $fpath[(I){{ .chezmoi.homeDir }}/.zsh/completion] )); then
-  fpath+=({{ .chezmoi.homeDir }}/.zsh/completion)
+  fpath=({{ .chezmoi.homeDir }}/.zsh/completion $fpath)
 fi
 
 # Map zsh HOST to bash HOSTNAME
