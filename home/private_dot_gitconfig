@@ -15,8 +15,8 @@
 [delta]
   navigate = true
   line-numbers = true
-  hyperlinks = true
-  features = boron
+  hyperlinks = false
+  features = boron zebra-dark
 [delta "boron"]
   syntax-theme = Boron
 [delta "zebra-dark"]
