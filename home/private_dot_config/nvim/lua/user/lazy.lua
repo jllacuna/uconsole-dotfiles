@@ -172,16 +172,9 @@ lazy.setup({
     "folke/lazydev.nvim",
     ft = "lua", -- only load on lua files
     opts = {
-      library = {
-        "lazy.nvim",
-        -- Load luvit types when the `vim.uv` word is found
-        { path = "luvit-meta/library", words = { "vim%.uv" } },
-        { path = "wezterm-types", mods = { "wezterm" } },
-      },
+      library = { "lazy.nvim" },
     },
   },
-  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
-  { "justinsgithub/wezterm-types", lazy = true }, -- optional wezterm typings
 
   -- snippets
   {
@@ -243,7 +236,7 @@ lazy.setup({
     config = function()
       require("dressing").setup {
         input = {
-          -- Position input just above cursor 
+          -- Position input just above cursor
           override = function(conf)
             conf.col = 0
             conf.row = -3
