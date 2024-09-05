@@ -39,4 +39,4 @@ rm $DEST/$FILENAME
 # Generate completions
 delta --generate-completion zsh > $COMPLETION/_delta
 # Reload completions
-rm ~/.zcompdump && exec zsh
+rm -f ~/.zcompdump && exec zsh
