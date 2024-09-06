@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+echo "Installing neovim packages with Lazy"
+nvim --headless "+Lazy! sync" +qa
