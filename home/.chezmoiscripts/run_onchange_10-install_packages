@@ -23,8 +23,8 @@ echo "deb [signed-by=/usr/share/keyrings/gierens.gpg] http://deb.gierens.de stab
 # Install
 # -------
 
-sudo apt update
-sudo apt install -y zsh \
+sudo apt update -yqq
+sudo apt install -yqq zsh \
   build-essential libssl-dev zlib1g-dev llvm \
   libbz2-dev libreadline-dev libsqlite3-dev \
   libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev \

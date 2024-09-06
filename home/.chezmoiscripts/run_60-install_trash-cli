@@ -2,12 +2,12 @@
 
 SHIMS="$HOME/.local/share/pyenv/shims" 
 
-$SHIMS/python --version
+echo "Installing or updating trash-cli"
 $SHIMS/pip install trash-cli 'trash-cli[completion]' --upgrade
 
 # Set up completions
 cmds=(trash-empty trash-list trash-restore trash-put trash)
 for cmd in ${cmds[@]}; do
-  $cmd --print-completion bash | sudo tee /usr/share/bash-completion/completions/$cmd > /dev/null
-  $cmd --print-completion zsh | sudo tee /usr/share/zsh/site-functions/_$cmd > /dev/null
+  $SHIMS/$cmd --print-completion bash | sudo tee /usr/share/bash-completion/completions/$cmd > /dev/null
+  $SHIMS/$cmd --print-completion zsh | sudo tee /usr/share/zsh/site-functions/_$cmd > /dev/null
 done

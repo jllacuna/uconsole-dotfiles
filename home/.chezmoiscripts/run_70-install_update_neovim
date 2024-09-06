@@ -28,7 +28,7 @@ curl --create-dirs --progress-bar -Lo $DEST/neovim.tar.gz $REPO/archive/refs/tag
 rm -fr $DEST/neovim
 
 # Extract the tarball
-cd $DEST && tar xvzf neovim.tar.gz --transform s/neovim-$TAG/neovim/ && rm neovim.tar.gz
+cd $DEST && tar --checkpoint=1000 -xzf neovim.tar.gz --transform s/neovim-$TAG/neovim/ && rm neovim.tar.gz
 
 # Build and install
 cd $DEST/neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo && cd build && cpack -G DEB && sudo dpkg -i nvim-linux64.deb

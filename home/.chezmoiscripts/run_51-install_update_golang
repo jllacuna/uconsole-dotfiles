@@ -42,4 +42,4 @@ fi
 rm -fr $DEST/go
 
 # Extract the tarball
-cd $DEST && tar xvzf $FILENAME && rm $FILENAME
+cd $DEST && tar --checkpoint=1000 -xzf $FILENAME && rm $FILENAME
