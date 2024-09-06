@@ -2,10 +2,11 @@
 
 DOWNLOAD="https://go.dev/dl"
 DEST=~/.local/share
+jq=~/.local/bin/jq
 
 # Get latest release version
 DATA=$(curl -Ls $DOWNLOAD/?mode=json)
-TAG=$(echo $DATA | jq -r '.[0].version')
+TAG=$(echo $DATA | $jq -r '.[0].version')
 
 GO_VERSION=$(go version 2> /dev/null)
 VERSION_REGEX='go[0-9\.]+'
@@ -23,8 +24,8 @@ else
   echo "Updating golang: $TAG"
 fi
 
-FILENAME=$(echo $DATA | jq -r '.[0].files[] | select(.arch=="arm64" and .os=="linux").filename')
-CHECKSUM=$(echo $DATA | jq -r '.[0].files[] | select(.arch=="arm64" and .os=="linux").sha256')
+FILENAME=$(echo $DATA | $jq -r '.[0].files[] | select(.arch=="arm64" and .os=="linux").filename')
+CHECKSUM=$(echo $DATA | $jq -r '.[0].files[] | select(.arch=="arm64" and .os=="linux").sha256')
 
 curl --create-dirs --progress-bar -Lo $DEST/$FILENAME $DOWNLOAD/$FILENAME
 

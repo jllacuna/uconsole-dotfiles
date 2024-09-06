@@ -45,6 +45,8 @@ mkdir -p $COMPLETION && cd $COMPLETION && ln -s $DEST/_wd.sh _wd.sh
 
 # Set up some warp points
 mkdir -p ~/.config/wd
-$DEST/wd.sh addcd --force ~/.local/share/chezmoi
-mkdir -p ~/working && $DEST/wd.sh addcd --force ~/working ing
-mkdir -p ~/workspace && $DEST/wd.sh addcd --force ~/workspace space
+mkdir -p ~/working
+mkdir -p ~/workspace
+WD_CONFIG="$HOME/.config/wd/warprc" $DEST/wd.sh addcd --force ~/.local/share/chezmoi
+WD_CONFIG="$HOME/.config/wd/warprc" $DEST/wd.sh addcd --force ~/working ing
+WD_CONFIG="$HOME/.config/wd/warprc" $DEST/wd.sh addcd --force ~/workspace space

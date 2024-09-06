@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-pip install trash-cli 'trash-cli[completion]' --upgrade
+SHIMS="$HOME/.local/share/pyenv/shims" 
+
+$SHIMS/python --version
+$SHIMS/pip install trash-cli 'trash-cli[completion]' --upgrade
 
 # Set up completions
 cmds=(trash-empty trash-list trash-restore trash-put trash)

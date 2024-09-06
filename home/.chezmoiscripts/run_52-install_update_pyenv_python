@@ -41,4 +41,5 @@ rm -f $BIN/pyenv
 mkdir -p $BIN && cd $BIN && ln -s $DEST/bin/pyenv pyenv
 
 # Install and use latest python3
-$BIN/pyenv install 3 && $BIN/pyenv global 3
+PYENV_ROOT="$HOME/.local/share/pyenv" $BIN/pyenv install 3
+PYENV_ROOT="$HOME/.local/share/pyenv" $BIN/pyenv global 3
