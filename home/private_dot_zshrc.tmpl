@@ -6,6 +6,10 @@ setopt autocd extendedglob
 
 bindkey -v
 
+if (( ! $fpath[(I)/usr/share/zsh/site-functions] )); then
+  fpath=(/usr/share/zsh/site-functions $fpath)
+fi
+
 if (( ! $fpath[(I){{ .chezmoi.homeDir }}/.zsh/completion] )); then
   fpath=({{ .chezmoi.homeDir }}/.zsh/completion $fpath)
 fi
