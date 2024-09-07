@@ -24,6 +24,8 @@ if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/bin* ]]; then
   PATH="${PATH:+${PATH}:}{{ .chezmoi.homeDir }}/.local/bin"
 fi
 
+export GOROOT="{{ .chezmoi.homeDir }}/.local/share/go"
+
 if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/share/go/bin* ]]; then
   PATH="${PATH:+${PATH}:}{{ .chezmoi.homeDir }}/.local/share/go/bin"
 fi
