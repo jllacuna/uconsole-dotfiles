@@ -28,6 +28,7 @@ sudo apt install -yqq zsh \
   build-essential libssl-dev zlib1g-dev llvm \
   libbz2-dev libreadline-dev libsqlite3-dev \
   libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev \
+  libevent-dev ncurses-dev bison pkg-config \
   python3-pip \
   ninja-build cmake gettext \
   sway swayidle swaylock waybar wlogout wl-clipboard \

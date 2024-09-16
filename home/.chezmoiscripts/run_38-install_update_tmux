@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+REPO="https://github.com/tmux/tmux"
+WORKING=~/working
+DEST=~/.local
+
+# Get latest release version
+LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
+REGEX='releases/tag/([0-9\.]+)'
+
+[[ $LOCATION =~ $REGEX ]]
+TAG=${BASH_REMATCH[1]}
+
+TMUX_VERSION=$(tmux -V 2> /dev/null)
+VERSION_REGEX='[0-9\.]+[a-z]?'
+[[ $TMUX_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "tmux is up-to-date: v$TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing tmux: v$TAG"
+else
+  echo "Updating tmux: v$TAG"
+fi
+
+# Download
+curl --create-dirs --progress-bar -Lo $WORKING/tmux.tar.gz $REPO/releases/download/$TAG/tmux-$TAG.tar.gz
+
+# Extract the tarball
+cd $WORKING && tar xzf tmux.tar.gz --transform s/tmux-$TAG/tmux/ && rm tmux.tar.gz
+
+# Build and install
+cd $WORKING/tmux && ./configure --prefix=$DEST && make && sudo make install
+
+# Cleanup
+cd $WORKING && rm -fr tmux
