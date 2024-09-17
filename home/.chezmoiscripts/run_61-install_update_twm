@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 REPO=https://github.com/vinnymeller/twm
-cargo=~/.cargo/bin/cargo
+BIN=~/.cargo/bin
+MAN=~/.local/share/man/man1
 
 # Get latest release version
 LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
@@ -27,4 +28,10 @@ else
   echo "Updating twm: v$TAG"
 fi
 
-$cargo install twm
+# Remove existing install
+rm -f $MAN/twm.1
+
+$BIN/cargo install twm
+
+# Set up the man page
+mkdir -p $MAN && $BIN/twm --print-man > $MAN/twm.1
