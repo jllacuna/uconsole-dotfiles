@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+RUSTUP_TAGS_API="https://api.github.com/repos/rust-lang/rustup/tags"
+RUST_REPO="https://github.com/rust-lang/rust"
+CARGO_BIN=~/.cargo/bin
+jq=~/.local/bin/jq
+
+# Get latest rustup release version
+RUSTUP_TAG=$(curl -Ls $RUSTUP_TAGS_API | $jq -r '.[0].name')
+
+# Get latest rust release version
+LOCATION=$(curl -si $RUST_REPO/releases/latest | grep -i 'location:*')
+REGEX='releases/tag/([0-9\.]+)'
+
+[[ $LOCATION =~ $REGEX ]]
+RUST_TAG=${BASH_REMATCH[1]}
+
+RUSTUP_VERSION=$(rustup --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+[[ $RUSTUP_VERSION =~ $VERSION_REGEX ]]
+RUSTUP_CURRENT_TAG=${BASH_REMATCH[0]}
+
+RUST_VERSION=$(rustc --version 2> /dev/null)
+[[ $RUST_VERSION =~ $VERSION_REGEX ]]
+RUST_CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$RUSTUP_TAG" = "$RUSTUP_CURRENT_TAG" ]; then
+  echo "rustup is up-to-date: v$RUSTUP_TAG"
+fi
+
+if [ "$RUST_TAG" = "$RUST_CURRENT_TAG" ]; then
+  echo "rust is up-to-date: v$RUST_TAG"
+fi
+
+if [ "$RUSTUP_TAG" = "$RUSTUP_CURRENT_TAG" -a "$RUST_TAG" = "$RUST_CURRENT_TAG" ]; then
+  exit 0
+fi
+
+if [ -z "$RUSTUP_CURRENT_TAG" ]; then
+  echo "Installing rustup: v$RUSTUP_TAG"
+  echo "Installing rust: v$RUST_TAG"
+
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+else
+  if [ "$RUSTUP_TAG" != "$RUSTUP_CURRENT_TAG" ]; then
+    echo "Updating rustup: v$RUSTUP_TAG"
+  fi
+
+  if [ "$RUST_TAG" != "$RUST_CURRENT_TAG" ]; then
+    echo "Updating rust: v$RUST_TAG"
+  fi
+
+  rustup update
+fi
+
+# Install completions
+# bash
+$CARGO_BIN/rustup completions bash | sudo tee /usr/share/bash-completion/completions/rustup > /dev/null
+$CARGO_BIN/rustup completions bash cargo | sudo tee /usr/share/bash-completion/completions/cargo > /dev/null
+
+# zsh
+$CARGO_BIN/rustup completions zsh | sudo tee /usr/share/zsh/site-functions/_rustup > /dev/null
+$CARGO_BIN/rustup completions zsh cargo | sudo tee /usr/share/zsh/site-functions/_cargo > /dev/null

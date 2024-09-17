@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-TAGS_API=https://api.github.com/repos/andreafrancia/trash-cli/tags
-SHIMS="$HOME/.local/share/pyenv/shims" 
+TAGS_API="https://api.github.com/repos/andreafrancia/trash-cli/tags"
+SHIMS=~/.local/share/pyenv/shims
 jq=~/.local/bin/jq
 
 # Get latest release version

@@ -42,6 +42,11 @@
   readonly = true
   url = "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh"
   refreshPeriod = "168h"
+[".zsh/completion/_rustc"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/rust/_rustc"
+  refreshPeriod = "168h"
 [".config/bat/themes/Boron.tmTheme"]
   type = "file"
   readonly = true

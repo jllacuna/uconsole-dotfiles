@@ -24,11 +24,15 @@ if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/bin* ]]; then
   PATH="${PATH:+${PATH}:}{{ .chezmoi.homeDir }}/.local/bin"
 fi
 
+# golang
 export GOROOT="{{ .chezmoi.homeDir }}/.local/share/go"
 
 if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/share/go/bin* ]]; then
   PATH="${PATH:+${PATH}:}{{ .chezmoi.homeDir }}/.local/share/go/bin"
 fi
+
+# rust
+source {{ .chezmoi.homeDir }}/.cargo/env
 
 # Colors for ls, tree, fd, etc.
 export LS_COLORS="$(vivid generate jellybeans)"
