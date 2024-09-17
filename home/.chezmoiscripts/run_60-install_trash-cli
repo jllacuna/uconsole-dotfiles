@@ -1,8 +1,25 @@
 #!/usr/bin/env bash
 
+TAGS_API=https://api.github.com/repos/andreafrancia/trash-cli/tags
 SHIMS="$HOME/.local/share/pyenv/shims" 
+jq=~/.local/bin/jq
 
-echo "Installing or updating trash-cli"
+# Get latest release version
+TAG=$(curl -Ls $TAGS_API | $jq -r '.[0].name')
+
+CURRENT_TAG=$(trash --version 2> /dev/null)
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "trash-cli is up-to-date: v$TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing trash-cli: v$TAG"
+else
+  echo "Updating trash-cli: v$TAG"
+fi
+
 $SHIMS/pip install trash-cli 'trash-cli[completion]' --upgrade
 
 # Set up completions
