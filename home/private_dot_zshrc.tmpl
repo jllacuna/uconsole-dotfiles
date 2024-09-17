@@ -122,6 +122,9 @@ export NVM_DIR="{{ .chezmoi.homeDir }}/.local/share/nvm"
 export PYENV_ROOT="{{ .chezmoi.homeDir }}/.local/share/pyenv"
 eval "$(pyenv init -)"
 
+# twm
+eval "$(twm --print-zsh-completion)"
+
 # WARNING: fzf-tab needs to be loaded after compinit but before syntax highlighting and autosuggestions
 # https://github.com/Aloxaf/fzf-tab?tab=readme-ov-file#install
 source ~/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
