@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Add user to docker group so we don't have to run docker commands with sudo
+sudo usermod -aG docker $USER
+
+# Configure docker daemon
+# Configures json-file logging driver with log rotation
+echo '{
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+  }
+}' | sudo tee /etc/docker/daemon.json > /dev/null
+
+# Restart docker
+sudo systemctl restart docker.service

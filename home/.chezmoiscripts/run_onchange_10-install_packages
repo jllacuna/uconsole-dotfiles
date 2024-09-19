@@ -20,6 +20,19 @@ Pin-Priority: 1000
 wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --yes --dearmor -o /usr/share/keyrings/gierens.gpg
 echo "deb [signed-by=/usr/share/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list > /dev/null
 
+# docker
+# Uninstall unsupported versions
+for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+# Add Docker's official GPG key:
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo tee /usr/share/keyrings/docker.asc > /dev/null
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker.asc] https://download.docker.com/linux/debian \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
 # Install
 # -------
 
@@ -33,5 +46,6 @@ sudo apt install -yqq zsh \
   ninja-build cmake gettext \
   sway swayidle swaylock waybar wlogout wl-clipboard \
   wezterm firefox \
-  keychain tree eza
+  keychain tree eza \
+  docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo apt install --fix-broken
