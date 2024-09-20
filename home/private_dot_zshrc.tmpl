@@ -31,6 +31,10 @@ if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/share/go/bin* ]]; then
   PATH="${PATH:+${PATH}:}{{ .chezmoi.homeDir }}/.local/share/go/bin"
 fi
 
+if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/go/bin* ]]; then
+  PATH="${PATH:+${PATH}:}{{ .chezmoi.homeDir }}/go/bin"
+fi
+
 # rust
 source {{ .chezmoi.homeDir }}/.cargo/env
 
