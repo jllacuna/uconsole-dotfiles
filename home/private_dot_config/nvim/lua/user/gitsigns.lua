@@ -28,8 +28,10 @@ gitsigns.setup {
     end, { expr = true, desc = '[git] Previous hunk' })
 
     -- Actions
-    map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>', { desc = '[git] Stage hunk' })
-    map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>', { desc = '[git] Reset hunk' })
+    map('n', '<leader>hs', gs.stage_hunk, { desc = '[git] Stage hunk' })
+    map('n', '<leader>hr', gs.reset_hunk, { desc = '[git] Reset hunk' })
+    map('v', '<leader>hs', function() gs.stage_hunk { vim.fn.line('.'), vim.fn.line('v') } end, { desc = '[git] Stage hunk(s)' }) -- Stage all hunks in the selection
+    map('v', '<leader>hr', function() gs.reset_hunk { vim.fn.line('.'), vim.fn.line('v') } end, { desc = '[git] Reset hunk(s)' }) -- Reset all hunks in the selection
     map('n', '<leader>hu', gs.undo_stage_hunk, { desc = '[git] Undo stage hunk' })
     map('n', '<leader>hS', gs.stage_buffer, { desc = '[git] Stage buffer' })
     map('n', '<leader>hR', gs.reset_buffer, { desc = '[git] Reset buffer' })
