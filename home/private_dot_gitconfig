@@ -12,6 +12,7 @@
 [core]
   editor = nvim
   pager = delta
+  excludesFile = ~/.config/git/gitignore
 [delta]
   navigate = true
   line-numbers = true
