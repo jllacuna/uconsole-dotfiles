@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+# Switch from mdns4_minimal to mdns4
+sudo sed -i 's/mdns4_minimal/mdns4/' /etc/nsswitch.conf
+
+# Create /etc/mdns.allow file
+# Allow .local domains for mdns
+echo '.local.
+.local' | sudo tee /etc/mdns.allow > /dev/null
