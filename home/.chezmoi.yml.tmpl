@@ -2,6 +2,10 @@
 {{ $bitbucketEmail := promptString "Bitbucket email" -}}
 {{ $bitbucketSubdomain := promptString "Bitbucket subdomain" -}}
 {{ $githubEmail := promptString "Github private email" -}}
+encryption: age
+age:
+  identity: ~/.config/chezmoi/key.txt
+  recipient: age1q32r2jvahhvhhdn6f9t7acwmna2ed6t53gnnac0r5wcn60jd0urqkgcd07
 data:
   fullName: {{ $fullName }}
   nerdFont: Hack

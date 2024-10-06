@@ -51,15 +51,6 @@ The first time you run `chezmoi apply`, it will prompt for some information
 1. Add user to sudo and systemd-journal groups: `sudo usermod -aG sudo,systemd-journal <username>`
     - Test: `groups <username>` - should return `sudo` and `systemd-journal`
 1. Login as `<username>`
-1. Set up SSH key
-    1. `ssh-keygen -t ed25519 -C "<github private email>"`
-        - Accept default filename
-        - Enter SSH key password
-    1. Start ssh-agent: `eval "$(ssh-agent -s)"`
-    1. Add key to ssh-agent: `ssh-add ~/.ssh/id_ed25519`
-    1. Open browser to https://github.com/settings/keys
-    1. Add contents of `~/.ssh/id_ed25519.pub` to Github SSH keys
-    1. Test: `ssh -T git@github.com` - should return a welcome message confirming authentication
 1. Install [chezmoi](https://www.chezmoi.io/install/) 
     1. Find the latest `arm64` package here: https://www.chezmoi.io/install/#download-a-pre-built-linux-package
     1. Download the package: `wget https://github.com/twpayne/chezmoi/releases/download/v2.52.1/chezmoi_2.52.1_linux_arm64.deb`

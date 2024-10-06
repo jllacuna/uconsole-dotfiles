@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+config="${HOME}/.config/chezmoi"
+key="${config}/key.txt"
+
+if [ ! -f "$key" ]; then
+  mkdir -p "$config"
+  chezmoi age decrypt --output "$key" --passphrase "{{ .chezmoi.sourceDir }}/key.txt.age"
+  chmod 600 "$key"
+fi

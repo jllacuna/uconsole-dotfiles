@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+echo "Installing go packages"
+
+# lazy TUIs
+echo "  lazydocker"
+go install github.com/jesseduffield/lazydocker@latest
+echo "  lazygit"
+go install github.com/jesseduffield/lazygit@latest
+
+# age encryption
+# https://github.com/FiloSottile/age
+echo "  age"
+go install filippo.io/age/cmd/...@latest
