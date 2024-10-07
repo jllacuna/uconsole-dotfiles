@@ -2,7 +2,10 @@ HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 
-setopt autocd extendedglob
+setopt auto_cd extended_glob
+setopt extended_history share_history
+setopt hist_ignore_all_dups hist_save_no_dups
+setopt interactive_comments
 
 bindkey -v
 
@@ -133,3 +136,6 @@ source ~/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
 source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/plugins/alias-tips/alias-tips.plugin.zsh
+
+# zsh-syntax-highlighting
+ZSH_HIGHLIGHT_STYLES[comment]="fg=#888"
