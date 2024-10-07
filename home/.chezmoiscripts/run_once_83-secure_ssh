@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+echo 'Securing SSH server'
+sudo sed --in-place='.bak' -E \
+  -e 's/^#?KbdInteractiveAuthentication yes/KbdInteractiveAuthentication no/' \
+  -e 's/^#?PasswordAuthentication yes/PasswordAuthentication no/' \
+  -e 's/^#?UsePAM yes/UsePAM no/' \
+  -e 's/^#?PermitRootLogin (yes|prohibit-password|forced-commands-only)/PermitRootLogin no/' \
+  /etc/ssh/sshd_config
