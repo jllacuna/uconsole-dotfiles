@@ -63,10 +63,15 @@ In addition, the first time you run `chezmoi apply`, you will be prompted for th
             1. Initialize: `chezmoi init https://github.com/jllacuna/uconsole-dotfiles.git` - Will prompt for info (see [chezmoi data](#chezmoi-data))
             1. Preview the changes (*optional*): `chezmoi diff`
             1. Apply the changes:
-                - `script -q ~/chezmoi.log` - Starts a sub-shell and saves output to `~/chezmoi.log`
                 - `chezmoi apply` - Will prompt for `key.txt.age` passphrase
-                - `exit` - Exit out of sub-shell
-                - Review the log (*optional*): `less -r ~/chezmoi.log`
+                - **- or -** With logging:
+                    - Decrypt [age](https://www.chezmoi.io/user-guide/encryption/age/) key. Will prompt for `key.txt.age` passphrase
+
+                        ```
+                        chezmoi age decrypt --output ~/.config/chezmoi/key.txt --passphrase ~/.local/share/chezmoi/home/key.txt.age && chmod 600 ~/.config/chezmoi/key.txt
+                        ```
+
+                    - `chezmoi apply 2>&1 | tee ~/chezmoi.log` - Log output
                 - ***WARNING***: Do this on device in case SSH gets disconnected
         1. **- or -** All-in-one (only use with a validated stable configuration)
             1. `chezmoi init --apply https://github.com/jllacuna/uconsole-dotfiles.git` - Will prompt for info (see [chezmoi data](#chezmoi-data)) and `key.txt.age` passphrase
