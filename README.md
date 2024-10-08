@@ -4,7 +4,7 @@ Uses [chezmoi](https://www.chezmoi.io/) to manage dotfiles
 
 ## <a name="chezmoi-data">chezmoi data</a>
 
-The first time you run `chezmoi apply`, it will prompt for some information
+When you run `chezmoi init`, you will be prompted for some information
 
 |Data|Explanation|
 |-|-|
@@ -12,6 +12,8 @@ The first time you run `chezmoi apply`, it will prompt for some information
 |Bitbucket email|Your [Bitbucket](https://bitbucket.org/) email address, used to set `user.email` in gitconfig when the repository remote is `bitbucket.org`|
 |Bitbucket subdomain|Your [Bitbucket](https://bitbucket.org/) subdomain (e.g. `https://bitbucket.org/subdomain`), used to populate the commit message template when the repository remote is `bitbucket.org`|
 |Github private email|Your [Github](https://github.com/) private email address, used to set `user.email` in gitconfig when the repository remote is `github.com`. To find your private email address, go to https://github.com/settings/emails|
+
+In addition, the first time you run `chezmoi apply`, you will be prompted for the [age](https://github.com/FiloSottile/age) passphrase to `key.txt.age`
 
 ## Setup steps
 1. Flash [ClockworkPi bookworm](https://forum.clockworkpi.com/t/bookworm-6-6-y-for-the-uconsole-and-devterm/13235) (or latest) Lite OS to MicroSD card
@@ -53,17 +55,21 @@ The first time you run `chezmoi apply`, it will prompt for some information
 1. Login as `<username>`
 1. Install [chezmoi](https://www.chezmoi.io/install/) 
     1. Find the latest `arm64` package here: https://www.chezmoi.io/install/#download-a-pre-built-linux-package
-    1. Download the package: `wget https://github.com/twpayne/chezmoi/releases/download/v2.52.1/chezmoi_2.52.1_linux_arm64.deb`
+    1. Download the package: `wget https://github.com/twpayne/chezmoi/releases/download/v2.52.3/chezmoi_2.52.3_linux_arm64.deb`
     1. Install git: `sudo apt update -yq && sudo apt install -yq git`
-    1. Install chezmoi: `sudo dpkg -i chezmoi_2.52.1_linux_arm64.deb && rm chezmoi_2.52.0_linux_arm64.deb`
+    1. Install chezmoi: `sudo dpkg -i chezmoi_2.52.3_linux_arm64.deb && rm chezmoi_2.52.3_linux_arm64.deb`
     1. Initialize and apply chezmoi
         1. Step-by-step (recommended)
-            1. Initialize: `chezmoi init git@github.com:jllacuna/uconsole-dotfiles.git` - Will prompt for info (see [chezmoi data](#chezmoi-data))
+            1. Initialize: `chezmoi init https://github.com/jllacuna/uconsole-dotfiles.git` - Will prompt for info (see [chezmoi data](#chezmoi-data))
             1. Preview the changes (*optional*): `chezmoi diff`
-            1. Apply the changes: `chezmoi apply 2>&1 | tee ~/chezmoi.log` - saves output to `~/chezmoi.log`
+            1. Apply the changes:
+                - `script -q ~/chezmoi.log` - Starts a sub-shell and saves output to `~/chezmoi.log`
+                - `chezmoi apply` - Will prompt for `key.txt.age` passphrase
+                - `exit` - Exit out of sub-shell
+                - Review the log (*optional*): `less -r ~/chezmoi.log`
                 - ***WARNING***: Do this on device in case SSH gets disconnected
         1. **- or -** All-in-one (only use with a validated stable configuration)
-            1. `chezmoi init --apply git@github.com:jllacuna/uconsole-dotfiles.git` - Will prompt for info (see [chezmoi data](#chezmoi-data))
+            1. `chezmoi init --apply https://github.com/jllacuna/uconsole-dotfiles.git` - Will prompt for info (see [chezmoi data](#chezmoi-data)) and `key.txt.age` passphrase
                 - ***WARNING***: Do this on device in case SSH gets disconnected
 1. Change default shell to `zsh`: `chsh -s $(which zsh)`
 1. Reboot: `sudo reboot`

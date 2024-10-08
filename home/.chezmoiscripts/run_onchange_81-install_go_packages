@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 
+go=~/.local/share/go/bin/go
+
 echo "Installing go packages"
 
 # lazy TUIs
 echo "  lazydocker"
-go install github.com/jesseduffield/lazydocker@latest
+$go install github.com/jesseduffield/lazydocker@latest
 echo "  lazygit"
-go install github.com/jesseduffield/lazygit@latest
+$go install github.com/jesseduffield/lazygit@latest
 
 # age encryption
 # https://github.com/FiloSottile/age
 echo "  age"
-go install filippo.io/age/cmd/...@latest
+$go install filippo.io/age/cmd/...@latest
