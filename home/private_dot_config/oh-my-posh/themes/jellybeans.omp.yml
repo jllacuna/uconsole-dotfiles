@@ -5,6 +5,7 @@ console_title_template: "{{ .Pwd }}"
 palette:
   light-purple: "#c6b6ee"
   fuschia: "#a11278"
+  mid-orange: "#f09875"
   light-yellow: "#deeeb6"
   mid-green: "#75f098"
   green: "#12a13a"
@@ -36,6 +37,15 @@ blocks:
         style: plain
         foreground: p:light-yellow
         template: "{{ if .SSHSession }}<p:grey>\ueba9</> {{ .UserName }}<p:light-grey>@</>{{ .HostName }} {{ end }}"
+      - type: battery
+        style: plain
+        foreground: p:mid-green
+        foreground_templates:
+          - "{{ if le .Percentage 15 }}p:mid-red{{ end }}"
+          - "{{ if le .Percentage 30 }}p:mid-orange{{ end }}"
+        template: "{{ if and (.Segments.Contains \"Session\") (eq \"Discharging\" .State.String) }}{{ .Icon }} {{ .Percentage }}% {{ end }}"
+        properties:
+          discharging_icon: 󱃍
       # If not in a git repo, display the full path
       - type: path
         style: plain
