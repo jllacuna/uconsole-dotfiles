@@ -43,9 +43,11 @@ blocks:
         foreground_templates:
           - "{{ if le .Percentage 15 }}p:mid-red{{ end }}"
           - "{{ if le .Percentage 30 }}p:mid-orange{{ end }}"
-        template: "{{ if and (.Segments.Contains \"Session\") (eq \"Discharging\" .State.String) }}{{ .Icon }} {{ .Percentage }}% {{ end }}"
+        template: "{{ if .Segments.Contains \"Session\" }}{{ .Icon }} {{ .Percentage }}% {{ end }}"
         properties:
           discharging_icon: 󱃍
+          charging_icon: 󰢟
+          charged_icon: 󱟣
       # If not in a git repo, display the full path
       - type: path
         style: plain
