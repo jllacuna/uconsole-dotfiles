@@ -55,9 +55,9 @@ In addition, the first time you run `chezmoi apply`, you will be prompted for th
 1. Login as `<username>`
 1. Install [chezmoi](https://www.chezmoi.io/install/) 
     1. Find the latest `arm64` package here: https://www.chezmoi.io/install/#download-a-pre-built-linux-package
-    1. Download the package: `wget https://github.com/twpayne/chezmoi/releases/download/v2.52.3/chezmoi_2.52.3_linux_arm64.deb`
+    1. Download the package: `wget https://github.com/twpayne/chezmoi/releases/download/v2.52.4/chezmoi_2.52.4_linux_arm64.deb`
     1. Install git: `sudo apt update -yq && sudo apt install -yq git`
-    1. Install chezmoi: `sudo dpkg -i chezmoi_2.52.3_linux_arm64.deb && rm chezmoi_2.52.3_linux_arm64.deb`
+    1. Install chezmoi: `sudo dpkg -i chezmoi_2.52.4_linux_arm64.deb && rm chezmoi_2.52.4_linux_arm64.deb`
     1. Initialize and apply chezmoi
         1. Step-by-step (recommended)
             1. Initialize: `chezmoi init https://github.com/jllacuna/uconsole-dotfiles.git` - Will prompt for info (see [chezmoi data](#chezmoi-data))

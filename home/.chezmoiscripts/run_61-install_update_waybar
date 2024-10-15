@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 REPO=https://github.com/Alexays/Waybar
+SHIMS=~/.local/share/pyenv/shims
 BIN=/usr/local/bin
 DEST=~/.local/share/waybar
 
@@ -32,12 +33,15 @@ else
   git clone $REPO.git $DEST
 fi
 
+# Install meson
+$SHIMS/pip install meson --upgrade
+
 # Remove existing install
 rm -f $BIN/waybar
 
 cd $DEST
 git checkout tags/$TAG
-meson setup build
+$SHIMS/meson setup build
 ninja -C build
 ./build/waybar
 sudo ninja -C build install
