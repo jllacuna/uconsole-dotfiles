@@ -50,8 +50,8 @@ In addition, the first time you run `chezmoi apply`, you will be prompted for th
     1. Select `US`. Choose **OK**
     1. Select `Pacific Ocean`. Choose **OK**
 1. Add non-admin user: `sudo adduser <username>`
-1. Add user to sudo and systemd-journal groups: `sudo usermod -aG sudo,systemd-journal <username>`
-    - Test: `groups <username>` - should return `sudo` and `systemd-journal`
+1. Add user to sudo group: `sudo usermod -aG sudo <username>`
+    - Test: `groups <username>` - should return `sudo`
 1. Login as `<username>`
 1. Install [chezmoi](https://www.chezmoi.io/install/) 
     1. Find the latest `arm64` package here: https://www.chezmoi.io/install/#download-a-pre-built-linux-package

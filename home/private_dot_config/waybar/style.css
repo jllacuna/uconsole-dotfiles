@@ -15,6 +15,32 @@ tooltip {
   margin: 5px 5px 5px 0;
 }
 
+#backlight {
+  padding-right: 4px;
+}
+
+#backlight-slider slider {
+  min-height: 0;
+  min-width: 0;
+  opacity: 0;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
+#backlight-slider trough {
+  min-height: 15px;
+  min-width: 60px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) 30%, rgba(0, 0, 0, 0.1));
+  border: none;
+}
+#backlight-slider highlight {
+  min-width: 6px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(222, 238, 182, 1.0), rgba(222, 238, 182, 1.0) 30%, rgba(222, 238, 182, 0.7));
+}
+
 #battery {
   background: linear-gradient(180deg, rgba(18, 161, 58, 1.0), rgba(18, 161, 58, 1.0) 30%, rgba(18, 161, 58, 0.7));
 }

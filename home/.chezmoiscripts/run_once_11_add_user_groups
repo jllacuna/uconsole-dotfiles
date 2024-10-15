@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Add user to groups:
+# - systemd-journal: run journalctl without sudo
+# - video: run brightnessctl without sudo
+sudo usermod -aG systemd-journal,video $USER

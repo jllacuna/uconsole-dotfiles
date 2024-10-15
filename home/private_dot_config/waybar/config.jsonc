@@ -2,7 +2,16 @@
   "layer": "bottom",
   "modules-left": [ "clock", "sway/mode" ],
   "modules-center": [ "sway/workspaces" ],
-  "modules-right": [ "network", "battery", "custom/power" ],
+  "modules-right": [ "backlight", "backlight/slider", "network", "battery", "custom/power" ],
+  "backlight": {
+    "format": "{percent}% {icon}",
+    "format-icons": [ "󱩎", "󱩏", "󱩐", "󱩑", "󱩒", "󱩓", "󱩔", "󱩕", "󱩖", "󰛨" ],
+    "on-click": "brightnessctl s 2",
+    "on-click-right": "brightnessctl s 9"
+  },
+  "backlight/slider": {
+    "min": 10
+  },
   "battery": {
     "format": "{capacity}% {icon}",
     "format-charging": "{capacity}% 󱐋 {icon}",
@@ -15,11 +24,17 @@
   "clock": {
     "format": "{:%a %b %d %I:%M %p}",
     "format-alt": "{:%a %m/%d/%Y %H:%M %Z %z}",
-    "tooltip-format": "<tt>{calendar}</tt>",
-    "format-calendar-weekdays": "<span color='#9e83e2'><b>{}</b></span>",
-    "format-calendar-weeks": "<span color='#595959'><b>{}</b></span>",
-    "today-format": "<span color='#f075cd'><b>{}</b></span>",
-    "calendar-weeks-pos": "right"
+    "tooltip-format": "<tt><span size='13pt'>{calendar}</span></tt>",
+    "calendar": {
+      "mode": "year",
+      "mode-mon-col": 4,
+      "weeks-pos": "right",
+      "format": {
+        "weeks": "<span color='#595959'><b>{}</b></span>",
+        "weekdays": "<span color='#9e83e2'><b>{}</b></span>",
+        "today": "<span color='#f09875'><b>{}</b></span>"
+      }
+    }
   },
   "custom/power": {
     "format": "",
