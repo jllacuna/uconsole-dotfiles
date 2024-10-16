@@ -112,12 +112,16 @@ exec swayidle -w \
     bindsym $mod+Shift+e exec wlogout --protocol layer-shell --buttons-per-row 2
 
     # Fn buttons
-    bindsym XF86MonBrightnessUp exec brightnessctl s 1+
-    bindsym XF86MonBrightnessDown exec brightnessctl s 1-
 
-    bindsym XF86AudioRaiseVolume exec swaynag -m "TODO: Audio Up"
-    bindsym XF86AudioLowerVolume exec swaynag -m "TODO: Audio Down"
-    bindsym XF86AudioMute exec swaynag -m "TODO: Audio Mute"
+    # Brightness
+    bindsym XF86MonBrightnessUp exec brightnessctl -q s 1+
+    bindsym XF86MonBrightnessDown exec brightnessctl -q s 1-
+
+    # Volume - NOTE: Send signal 8 to update waybar custom volume module
+    bindsym XF86AudioRaiseVolume exec amixer -qM sset PCM 1%+ && pkill -RTMIN+8 waybar
+    bindsym XF86AudioLowerVolume exec amixer -qM sset PCM 1%- && pkill -RTMIN+8 waybar
+    # Toggle mute 
+    bindsym XF86AudioMute exec amixer -qM sset PCM toggle && pkill -RTMIN+8 waybar
 #
 # Moving around:
 #

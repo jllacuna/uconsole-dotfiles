@@ -2,12 +2,12 @@
   "layer": "bottom",
   "modules-left": [ "clock", "sway/mode" ],
   "modules-center": [ "sway/workspaces" ],
-  "modules-right": [ "backlight", "backlight/slider", "network", "battery", "custom/power" ],
+  "modules-right": [ "backlight", "backlight/slider", "custom/volume", "network", "battery", "custom/power" ],
   "backlight": {
     "format": "{percent}% {icon}",
     "format-icons": [ "󱩎", "󱩏", "󱩐", "󱩑", "󱩒", "󱩓", "󱩔", "󱩕", "󱩖", "󰛨" ],
-    "on-click": "brightnessctl s 2",
-    "on-click-right": "brightnessctl s 9"
+    "on-click": "brightnessctl -q s 9",
+    "on-click-right": "brightnessctl -q s 2"
   },
   "backlight/slider": {
     "min": 10
@@ -40,6 +40,14 @@
     "format": "",
     "on-click": "wlogout --protocol layer-shell --buttons-per-row 2",
     "tooltip": false
+  },
+  "custom/volume": {
+    "format": "{}",
+    "interval": 10,
+    "on-click": "amixer sset -qM PCM 10%+",
+    "on-click-right": "amixer sset -qM PCM 10%-",
+    "exec": "~/.config/waybar/scripts/volume.bash",
+    "signal": 8
   },
   "network": {
     "format": "{ifname}",
