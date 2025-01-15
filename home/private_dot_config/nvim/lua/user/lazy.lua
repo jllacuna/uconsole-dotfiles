@@ -305,6 +305,8 @@ lazy.setup({
 
   -- Peek registers
   { "gennaro-tedesco/nvim-peekup" },
+
+  { "ledger/vim-ledger", },
 }, {
   rocks = {
     -- Disable hererocks for now
