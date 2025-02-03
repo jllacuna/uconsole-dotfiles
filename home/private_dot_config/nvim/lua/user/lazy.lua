@@ -200,6 +200,13 @@ lazy.setup({
     config = function () require("user.lsp") end,
   },
 
+  -- Jump to next/previous reference with LSP
+  {
+    "mawkler/refjump.nvim",
+    event = "LspAttach",
+    opts = {},
+  },
+
   -- Display code context in status line
   {
     "SmiteshP/nvim-navic",
