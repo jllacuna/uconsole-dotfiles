@@ -1,8 +1,0 @@
-#!/usr/bin/env sh
-
-NU=~/.local/bin/nu
-
-# Set up some bookmarks
-cd ~/.local/share/chezmoi && $NU -l -c "d chezmoi; s chezmoi"
-cd ~/working && $NU -l -c "d ing; s ing"
-cd ~/workspace && $NU -l -c "d space; s space"
