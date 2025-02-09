@@ -280,6 +280,8 @@ lazy.setup({
       "nvim-treesitter/nvim-treesitter-textobjects",
       -- Changes format of comments based on location within the file. Useful for JSX and svelte
       "JoosepAlviste/nvim-ts-context-commentstring",
+      -- nushell
+      "nushell/tree-sitter-nu",
     },
     config = function () require("user.treesitter") end,
   },

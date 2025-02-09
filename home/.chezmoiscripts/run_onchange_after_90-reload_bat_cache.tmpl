@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 
-# Only run if the themes change
+# Only run if the themes or syntaxes change
 {{ $themes := glob (joinPath .chezmoi.homeDir ".config" "bat" "themes" "*.tmTheme") }}
 {{- range $themes }}
   {{- "#" }} {{ include . | sha256sum }} {{ . }}
 {{ end }}
+{{ $syntaxes := glob (joinPath .chezmoi.homeDir ".config" "bat" "syntaxes" "*.sublime-syntax") }}
+{{- range $syntaxes }}
+  {{- "#" }} {{ include . | sha256sum }} {{ . }}
+{{ end }}
+
+# Hack: Fix regex error in nushell syntax file
+# see: https://github.com/kurokirasama/nushell_sublime_syntax/issues/4
+sed -i -e 's/| *? *|/| \\? |/g' ~/.config/bat/syntaxes/nushell.sublime-syntax
 
 echo "Updating bat themes and syntax definitions"
 bat cache --build

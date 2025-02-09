@@ -52,3 +52,13 @@
   readonly = true
   url = "https://raw.githubusercontent.com/mjio/boron.tmtheme/master/Boron.tmTheme"
   refreshPeriod = "168h"
+[".config/bat/syntaxes/nushell.sublime-syntax"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/kurokirasama/nushell_sublime_syntax/refs/heads/main/nushell.sublime-syntax"
+  refreshPeriod = "168h"
+[".config/nushell/bookmark_for_dir.nu"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/yh17549/nu-dir-bookmark/refs/heads/main/bookmark_for_dir.nu"
+  refreshPeriod = "168h"

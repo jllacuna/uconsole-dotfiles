@@ -117,7 +117,7 @@ blocks:
     alignment: left
     newline: true
     segments:
-      - type: text
+      - type: shell
         style: plain
         foreground: p:mid-green
-        template: "\u2570\u276f"
+        template: "\u2570{{ if ne .Name \"zsh\" }}{{ .Name  }}{{ end }}\u276f"

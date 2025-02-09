@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+REPO="https://github.com/nushell/nushell"
+DEST=~/.local/share
+BIN=~/.local/bin
+
+# Get latest release version
+LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
+REGEX='releases/tag/([0-9\.]+)'
+
+[[ $LOCATION =~ $REGEX ]]
+TAG=${BASH_REMATCH[1]}
+
+NUSHELL_VERSION=$(nu --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+[[ $NUSHELL_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "nushell is up-to-date: v$TAG"
+  exit 0
+fi
+
+echo "Installing nushell: v$TAG"
+
+FILE_STEM="nu-${TAG}-aarch64-unknown-linux-gnu"
+curl --create-dirs --progress-bar -Lo $DEST/$FILE_STEM.tar.gz $REPO/releases/download/$TAG/$FILE_STEM.tar.gz
+
+# Validate the checksum
+SHA256=$(cd $DEST && sha256sum $FILE_STEM.tar.gz)
+CHECKSUM=$(curl -sL $REPO/releases/download/$TAG/SHA256SUMS | grep $FILE_STEM.tar.gz)
+
+if [[ "$SHA256" != "$CHECKSUM" ]]; then
+  echo "nushell checksums do NOT match"
+  rm $DEST/$FILE_STEM.tar.gz
+  exit 1
+fi
+
+# Remove existing install
+rm -fr $DEST/nushell
+rm -f $BIN/nu
+
+# Extract the tarball
+cd $DEST && tar xvzf $FILE_STEM.tar.gz --transform s/$FILE_STEM/nushell/ && rm $FILE_STEM.tar.gz
+
+# Symlink the command
+mkdir -p $BIN && cd $BIN && ln -s $DEST/nushell/nu nu
