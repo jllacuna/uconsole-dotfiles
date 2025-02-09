@@ -68,6 +68,17 @@ lazy.setup({
     config = function() require("mini.align").setup() end,
   },
 
+  -- Split/join arrays, hashes/objects, statements
+  {
+    'Wansmer/treesj',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('treesj').setup({
+        use_default_keymaps = false,
+      })
+    end,
+  },
+
   -- File explorer
   {
     "nvim-tree/nvim-tree.lua",

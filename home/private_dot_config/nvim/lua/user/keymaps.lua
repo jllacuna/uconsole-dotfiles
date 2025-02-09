@@ -104,6 +104,9 @@ end, { desc = 'Rename symbol', expr = true })
 keymap("n", "<leader>s", "<cmd>TSHighlightCapturesUnderCursor<cr>", merge({ desc = 'Show syntax highlight groups' }, opts))
 keymap("n", "<leader>p", "<cmd>TSPlaygroundToggle<cr>", merge({ desc = 'Toggle treesitter playground' }, opts))
 
+-- treesj --
+keymap("n", "<leader>J", "<cmd>TSJToggle<cr>", merge({ desc = 'Toggle join/split arrays, objects, statements' }, opts))
+
 -- render-markdown.nvim --
 keymap("n", "<leader>m", "<cmd>RenderMarkdown toggle<cr>", merge({ desc = 'Toggle Markdown Render' }, opts))
 
