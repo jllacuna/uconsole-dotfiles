@@ -326,6 +326,7 @@ lazy.setup({
   -- Peek registers
   { "gennaro-tedesco/nvim-peekup" },
 
+  -- ledger CLI
   { "ledger/vim-ledger", },
 }, {
   rocks = {

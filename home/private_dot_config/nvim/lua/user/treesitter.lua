@@ -33,6 +33,7 @@ configs.setup {
     -- "jsdoc",
     "json",
     -- "kotlin",
+    "ledger",
     "lua",
     -- "make",
     "markdown",
