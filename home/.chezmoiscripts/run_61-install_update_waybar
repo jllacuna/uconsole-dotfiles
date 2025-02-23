@@ -26,7 +26,7 @@ fi
 if [ -d $DEST ]; then
   echo "Updating waybar: v$TAG"
 
-  cd $DEST && git pull
+  cd $DEST && git checkout master && git pull
 else
   echo "Installing waybar: v$TAG"
 
@@ -35,9 +35,6 @@ fi
 
 # Install meson
 $SHIMS/pip install meson --upgrade
-
-# Remove existing install
-rm -f $BIN/waybar
 
 cd $DEST
 git checkout tags/$TAG
