@@ -62,6 +62,11 @@
   readonly = true
   url = "https://raw.githubusercontent.com/etienne-monier/LedgerTools/refs/heads/master/Ledger.sublime-syntax"
   refreshPeriod = "168h"
+[".config/bat/syntaxes/tmux.sublime-syntax"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/gerardroche/sublime-tmux/refs/heads/master/Tmux.sublime-syntax"
+  refreshPeriod = "168h"
 [".config/nushell/bookmark_for_dir.nu"]
   type = "file"
   readonly = true
