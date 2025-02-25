@@ -10,9 +10,5 @@
   {{- "#" }} {{ include . | sha256sum }} {{ . }}
 {{ end }}
 
-# Hack: Fix regex error in nushell syntax file
-# see: https://github.com/kurokirasama/nushell_sublime_syntax/issues/4
-sed -i -e 's/| *? *|/| \\? |/g' ~/.config/bat/syntaxes/nushell.sublime-syntax
-
 echo "Updating bat themes and syntax definitions"
 bat cache --build

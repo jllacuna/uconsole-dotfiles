@@ -57,6 +57,10 @@
   readonly = true
   url = "https://raw.githubusercontent.com/kurokirasama/nushell_sublime_syntax/refs/heads/main/nushell.sublime-syntax"
   refreshPeriod = "168h"
+  # Hack: Fix regex error in nushell syntax file
+  # see: https://github.com/kurokirasama/nushell_sublime_syntax/issues/4
+  filter.command = "sed"
+  filter.args = [ "-e", 's/| *? *|/| \\? |/g' ]
 [".config/bat/syntaxes/ledger.sublime-syntax"]
   type = "file"
   readonly = true
