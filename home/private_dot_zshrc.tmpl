@@ -116,7 +116,7 @@ fzf_rc="${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 [ -f $fzf_rc ] && source $fzf_rc
 
 # zoxide completions
-eval "$(zoxide init zsh)"
+eval "$(zoxide init --cmd cd zsh)"
 
 # Oh My Posh
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/jellybeans.omp.yml)"
