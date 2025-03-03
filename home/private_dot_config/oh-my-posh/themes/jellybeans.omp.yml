@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 final_space: true
-version: 2
+version: 3
 console_title_template: "{{ .Pwd }}"
 palette:
   light-purple: "#c6b6ee"
@@ -23,7 +23,7 @@ transient_prompt:
   template: "<p:mid-blue>\u203a</>\u276f "
 secondary_prompt:
   foreground: p:grey
-  template: "󱦰 "
+  template: "\U000f19b0 "
 blocks:
   - type: prompt
     alignment: left
@@ -45,9 +45,9 @@ blocks:
           - "{{ if le .Percentage 30 }}p:mid-orange{{ end }}"
         template: "{{ if .Segments.Contains \"Session\" }}{{ .Icon }} {{ .Percentage }}% {{ end }}"
         properties:
-          discharging_icon: 󱃍
-          charging_icon: 󰢟
-          charged_icon: 󱟣
+          discharging_icon: 󱟤
+          charging_icon: 󰂄
+          charged_icon: 󱟢
       # If not in a git repo, display the full path
       - type: path
         style: plain
