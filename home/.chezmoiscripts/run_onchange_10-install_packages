@@ -48,6 +48,7 @@ sudo apt install -yqq zsh \
   sway swayidle swaylock wlogout wl-clipboard \
   wezterm firefox \
   keychain tree eza \
+  dnsutils \
   docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 # For waybar https://github.com/Alexays/Waybar?tab=readme-ov-file#building-from-source
 sudo apt install -yqq \
