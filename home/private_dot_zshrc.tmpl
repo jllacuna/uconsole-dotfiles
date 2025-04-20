@@ -31,6 +31,7 @@ fi
 # https://unix.stackexchange.com/a/209394
 HOSTNAME=$HOST
 
+export LANG=en_US.UTF-8
 export EDITOR=nvim
 
 if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/bin* ]]; then
