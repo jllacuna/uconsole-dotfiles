@@ -119,6 +119,7 @@ keymap("n", "<leader>ft", "<cmd>TodoTelescope<cr>", merge({ desc = 'Find TODOs' 
 
 -- Bbye --
 keymap("n", "<leader>bd", "<cmd>Bdelete<cr>", merge({ desc = 'Delete buffer keep window' }, opts))
+keymap("n", "<leader>ba", "<cmd>bufdo Bdelete<cr>", merge({ desc = 'Delete all buffers keep window' }, opts))
 
 -- outline.nvim --
 keymap("n", "<leader>o", "<cmd>Outline<cr>", merge({ desc = 'Toggle symbol outline' }, opts))
