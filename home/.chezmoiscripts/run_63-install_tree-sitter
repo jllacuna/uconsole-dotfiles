@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+REPO="https://github.com/tree-sitter/tree-sitter"
+
+# Get latest release version
+LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
+REGEX='releases/tag/v([0-9\.]+)'
+
+[[ $LOCATION =~ $REGEX ]]
+TAG=${BASH_REMATCH[1]}
+
+TREESITTER_VERSION=$(tree-sitter --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+[[ $TREESITTER_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "tree-sitter is up-to-date: v$TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing tree-sitter: v$TAG"
+else
+  echo "Updating tree-sitter: v$TAG"
+fi
+
+~/.cargo/bin/cargo install tree-sitter-cli

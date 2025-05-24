@@ -14,4 +14,7 @@ markdown.setup {
     right_pad = 2,
     width = "block",
   },
+  latex = {
+    enabled = false,
+  },
 }
