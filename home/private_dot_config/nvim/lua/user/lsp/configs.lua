@@ -25,6 +25,7 @@ local servers = {
 
 mason_lspconfig.setup {
   ensure_installed = servers,
+  automatic_enable = false,
 }
 
 local lsp_status_ok, lspconfig = pcall(require, "lspconfig")
