@@ -42,9 +42,6 @@ source ~/.config/nushell/bookmark_for_dir.nu
 # Zoxide
 source ~/.config/nushell/.zoxide.nu
 
-# Oh My Posh
-source ~/.config/nushell/.oh-my-posh.nu
-
 # Aliases
 alias clr = clear
 alias xit = exit
@@ -68,3 +65,6 @@ alias l = bm
 
 # Alias nvim
 alias e = nvim
+
+# Oh My Posh
+oh-my-posh init nu
