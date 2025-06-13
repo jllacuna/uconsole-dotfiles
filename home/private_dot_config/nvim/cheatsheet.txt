@@ -9,6 +9,7 @@ Previous diagnostic            | [d
 Toggle blame current line      | <leader>hb
 Next git hunk                  | ]c
 Previous git hunk              | [c
+Toggle split/join lists        | <leader>J
 Toggle symbol outline          | <leader>o
 Toggle colorizing color values | <leader>co
 Rename symbol                  | <leader>rn
