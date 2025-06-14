@@ -3,7 +3,7 @@ upgrade:
   # Display an upgrade notice on shell start
   notice: true
   # Automatically upgrade minor versions
-  auto: true
+  auto: false
   # Interval to check for upgrades (default: 24h)
   interval: 24h
   # Where to check for upgrades (cdn or github, default: cdn)
