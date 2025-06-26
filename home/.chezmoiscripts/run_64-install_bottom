@@ -26,3 +26,13 @@ else
 fi
 
 ~/.cargo/bin/cargo install bottom
+
+# Autocompletion
+curl --create-dirs -Lo /tmp/bottom/completion.tar.gz $REPO/releases/download/$TAG/completion.tar.gz
+cd /tmp/bottom && tar xvzf completion.tar.gz
+
+sudo cp /tmp/bottom/btm.bash /etc/bash_completion.d/btm.bash
+sudo cp /tmp/bottom/_btm /usr/share/zsh/site-functions/_btm
+cp /tmp/bottom/btm.nu $HOME/.config/nushell/btm.nu
+
+rm -fr /tmp/bottom

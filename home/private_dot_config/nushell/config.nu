@@ -42,6 +42,9 @@ source ~/.config/nushell/bookmark_for_dir.nu
 # Zoxide
 source ~/.config/nushell/.zoxide.nu
 
+# bottom
+source ~/.config/nushell/btm.nu
+
 # Aliases
 alias clr = clear
 alias xit = exit
