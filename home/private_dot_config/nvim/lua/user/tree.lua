@@ -112,10 +112,9 @@ nvim_tree.setup {
     args = {}, -- default
   },
   filters = {
-    dotfiles = false, -- do not show hidden dot files
+    dotfiles = false, -- do not filter/hide dot files
     custom = {
-      "^\\.git",
-      "^node_modules",
+      "^\\.git$",
     },
   },
   git = {
