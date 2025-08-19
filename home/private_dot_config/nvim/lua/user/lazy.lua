@@ -26,7 +26,7 @@ lazy.setup({
   -- Be able to show icons from Nerd Fonts in plugins
   {
     "nvim-tree/nvim-web-devicons",
-    config = function () require("user.devicons") end,
+    config = function() require("user.devicons") end,
   },
 
   -- Colorschemes
@@ -51,14 +51,14 @@ lazy.setup({
   -- Autopairs, integrates with both cmp and treesitter
   {
     "windwp/nvim-autopairs",
-    config = function () require("user.autopairs") end,
+    config = function() require("user.autopairs") end,
   },
 
   -- Easily comment stuff
   {
     "numToStr/Comment.nvim",
     lazy = false,
-    config = function () require("user.comment") end,
+    config = function() require("user.comment") end,
   },
 
   -- Vertically align characters
@@ -88,7 +88,7 @@ lazy.setup({
       "nvim-tree/nvim-web-devicons",
       "b0o/nvim-tree-preview.lua",
     },
-    config = function () require("user.tree") end,
+    config = function() require("user.tree") end,
   },
 
   -- Update code when performing file operations in nvim-tree
@@ -105,7 +105,7 @@ lazy.setup({
   -- Status line
   {
     "nvim-lualine/lualine.nvim",
-    config = function () require("user.lualine") end,
+    config = function() require("user.lualine") end,
   },
 
   -- Add, change, or delete surrounding quotes, parens, braces, etc.
@@ -120,14 +120,14 @@ lazy.setup({
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
-    config = function () require("user.whichkey") end,
+    config = function() require("user.whichkey") end,
   },
 
   -- Markdown editing
   {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
-    config = function () require("user.markdown") end,
+    config = function() require("user.markdown") end,
   },
 
   -- Markdown preview
@@ -155,14 +155,14 @@ lazy.setup({
   -- Displays lightbulb in sign column when code actions are available
   {
     "kosayoda/nvim-lightbulb",
-    config = function () require("user.lightbulb") end,
+    config = function() require("user.lightbulb") end,
   },
 
   -- cmp plugins
   -- The completion plugin
   {
     "hrsh7th/nvim-cmp",
-    config = function () require("user.cmp") end,
+    config = function() require("user.cmp") end,
   },
 
   { "hrsh7th/cmp-nvim-lua" },                -- Neovim Lua runtime API
@@ -208,7 +208,7 @@ lazy.setup({
       -- https://github.com/jose-elias-alvarez/typescript.nvim/issues/80#issuecomment-1633410138
       "yioneko/nvim-vtsls",
     },
-    config = function () require("user.lsp") end,
+    config = function() require("user.lsp") end,
   },
 
   -- Jump to next/previous reference with LSP
@@ -222,7 +222,7 @@ lazy.setup({
   {
     "SmiteshP/nvim-navic",
     dependencies = { "neovim/nvim-lspconfig" },
-    config = function () require("user.navic") end,
+    config = function() require("user.navic") end,
   },
 
   -- Outline symbols
@@ -245,40 +245,43 @@ lazy.setup({
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = function () require("user.telescope") end,
+    config = function() require("user.telescope") end,
   },
 
   -- UI hooks
   {
-    "stevearc/dressing.nvim",
+    "rcarriga/nvim-notify",
     config = function()
-      require("dressing").setup {
-        input = {
-          -- Position input just above cursor
-          override = function(conf)
-            conf.col = 0
-            conf.row = -3
-            return conf
-          end,
-        },
+      require("notify").setup {
+        merge_duplicates = true,
+        top_down = false, -- Display notifications at the bottom
       }
     end,
+  },
+
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    },
+    config = function() require("user.noice") end,
   },
 
   -- Rename symbol with previews
   {
     "smjonas/inc-rename.nvim",
-    config = function()
-      require("inc_rename").setup {
-        input_buffer_type = "dressing",
-      }
-    end,
   },
 
   -- Displays a cheatsheet of commands, keymaps, nerd font icons, etc. in telescope
   {
     "sudormrfbin/cheatsheet.nvim",
-    config = function () require("user.cheatsheet") end,
+    config = function() require("user.cheatsheet") end,
   },
 
   -- Treesitter: Syntax parsing for better code highlights, etc.
@@ -291,10 +294,8 @@ lazy.setup({
       "nvim-treesitter/nvim-treesitter-textobjects",
       -- Changes format of comments based on location within the file. Useful for JSX and svelte
       "JoosepAlviste/nvim-ts-context-commentstring",
-      -- nushell
-      "nushell/tree-sitter-nu",
     },
-    config = function () require("user.treesitter") end,
+    config = function() require("user.treesitter") end,
   },
 
   -- Allows you to inspect treesitter syntax trees
@@ -304,23 +305,25 @@ lazy.setup({
   -- Displays git change indicators in the sign column and allows you to perform git operations inline
   {
     "lewis6991/gitsigns.nvim",
-    config = function () require("user.gitsigns") end,
+    config = function() require("user.gitsigns") end,
   },
 
   -- Search and insert Nerd fonts
   {
     '2kabhishek/nerdy.nvim',
     dependencies = {
-      'stevearc/dressing.nvim',
       'nvim-telescope/telescope.nvim',
     },
     cmd = 'Nerdy',
+    opts = {
+      add_default_keybindings = false,
+    },
   },
 
   -- Colorize color variables
   {
     "NvChad/nvim-colorizer.lua",
-    config = function () require("user.colorizer") end,
+    config = function() require("user.colorizer") end,
   },
 
   -- Peek registers

@@ -124,6 +124,10 @@ configs.setup {
         ["if"] = { query = "@function.inner", desc = "Select function inner" },
         ["ac"] = { query = "@class.outer", desc = "Select class outer" },
         ["ic"] = { query = "@class.inner", desc = "Select class inner" },
+        ["al"] = { query = "@loop.outer", desc = "Select loop outer" },
+        ["il"] = { query = "@loop.inner", desc = "Select loop inner" },
+        ["aC"] = { query = "@conditional.outer", desc = "Select conditional outer" },
+        ["iC"] = { query = "@conditional.inner", desc = "Select conditional inner" },
         -- You can also use captures from other query groups like `locals.scm`
         ["as"] = { query = "@scope", query_group = "locals", desc = "Select scope" },
         -- nushell
