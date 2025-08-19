@@ -200,9 +200,9 @@ lazy.setup({
 
   -- LSP, DAP, linters, formatters
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     dependencies = {
-      "williamboman/mason.nvim",
+      "mason-org/mason.nvim",
       "neovim/nvim-lspconfig",
       -- Reason NOT using typescript-language-server:
       -- https://github.com/jose-elias-alvarez/typescript.nvim/issues/80#issuecomment-1633410138
