@@ -58,6 +58,7 @@ configs.setup {
     "toml",
     "typescript",
     -- "vim",
+    "vimdoc",
     -- "vue",
     "xml",
     "yaml"
