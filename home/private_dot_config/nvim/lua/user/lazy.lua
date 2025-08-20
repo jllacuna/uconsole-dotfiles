@@ -276,6 +276,7 @@ lazy.setup({
   -- Rename symbol with previews
   {
     "smjonas/inc-rename.nvim",
+    opts = {},
   },
 
   -- Displays a cheatsheet of commands, keymaps, nerd font icons, etc. in telescope
