@@ -84,7 +84,7 @@ keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", merge({ desc = 'Find h
 keymap("n", "<leader>fd", "<cmd>Telescope diagnostics<cr>", merge({ desc = 'Find diagnostics' }, opts))
 keymap("n", "<leader>fc", "<cmd>Telescope git_status<cr>", merge({ desc = 'Find changes (git)' }, opts))
 keymap("n", "<leader>fn", "<cmd>Telescope nerdy<cr>", merge({ desc = 'Search and insert Nerd fonts' }, opts))
-keymap("n", "<leader>fo", "<cmd>Telescope notify<cr>", merge({ desc = 'Display notifications' }, opts))
+keymap("n", "<leader>fo", "<cmd>Telescope notify<cr>", merge({ desc = 'Search notification history' }, opts))
 vim.keymap.set("n", "<leader>fw", function()
   local word = vim.fn.expand("<cword>");
   local status_ok, tb = pcall(require, "telescope.builtin")
@@ -92,6 +92,9 @@ vim.keymap.set("n", "<leader>fw", function()
     tb.live_grep { default_text = word }
   end
 end, { desc = "Find word under cursor" })
+
+-- noice/nvim-notify --
+keymap("n", "<Esc>", "<cmd>Noice dismiss<cr>", merge({ desc = 'Dismiss notifications' }, opts))
 
 -- Cheatsheet --
 keymap("n", "<leader>cs", "<cmd>Cheatsheet<cr>", opts)
