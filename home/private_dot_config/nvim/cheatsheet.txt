@@ -9,6 +9,9 @@ Previous diagnostic            | [d
 Toggle blame current line      | <leader>hb
 Next git hunk                  | ]c
 Previous git hunk              | [c
+Next reference                 | ]r
+Previous reference             | [r
+Show status of active LSP      | :LspInfo
 Toggle split/join lists        | <leader>J
 Toggle symbol outline          | <leader>o
 Toggle colorizing color values | <leader>co
