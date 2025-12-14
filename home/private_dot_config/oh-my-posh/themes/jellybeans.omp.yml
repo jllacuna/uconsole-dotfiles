@@ -9,24 +9,24 @@ upgrade:
   # Where to check for upgrades (cdn or github, default: cdn)
   source: cdn
 final_space: true
-version: 3
+version: 4
 console_title_template: "{{ .Pwd }}"
 palette:
-  light-purple: "#c6b6ee"
-  fuschia: "#a11278"
-  mid-orange: "#f09875"
-  light-yellow: "#deeeb6"
-  mid-green: "#75f098"
-  green: "#12a13a"
-  dark-green: "#0a5c21"
-  mid-blue: "#75cdf0"
-  white: "#fff"
-  light-grey: "#d1d1d1"
-  grey: "#595959"
-  dark-grey: "#242424"
-  mid-red: "#f76e8b"
-  red: "#aa092c"
-  dark-red: "#610519"
+  light-purple: '#c6b6ee'
+  fuschia: '#a11278'
+  mid-orange: '#f09875'
+  light-yellow: '#deeeb6'
+  mid-green: '#75f098'
+  green: '#12a13a'
+  dark-green: '#0a5c21'
+  mid-blue: '#75cdf0'
+  white: '#fff'
+  light-grey: '#d1d1d1'
+  grey: '#595959'
+  dark-grey: '#242424'
+  mid-red: '#f76e8b'
+  red: '#aa092c'
+  dark-red: '#610519'
 transient_prompt:
   foreground: p:mid-green
   template: "<p:mid-blue>\u203a</>\u276f "
@@ -53,16 +53,16 @@ blocks:
           - "{{ if le .Percentage 15 }}p:mid-red{{ end }}"
           - "{{ if le .Percentage 30 }}p:mid-orange{{ end }}"
         template: "{{ if .Segments.Contains \"Session\" }}{{ .Icon }} {{ .Percentage }}% {{ end }}"
-        properties:
-          discharging_icon: 󱟤
-          charging_icon: 󰂄
-          charged_icon: 󱟢
+        options:
+          discharging_icon: "\U000F17E4"
+          charging_icon: "\U000F0084"
+          charged_icon: "\U000F17E2"
       # If not in a git repo, display the full path
       - type: path
         style: plain
         foreground: p:mid-blue
         template: "{{ if not (.Segments.Contains \"GitRepo\") }}{{ .Path }} {{ end }}"
-        properties:
+        options:
           home_icon: "\uf015 ~"
           style: full
       - type: git
@@ -73,7 +73,7 @@ blocks:
         foreground: p:white
         background: p:dark-grey
         template: "{{ .UpstreamIcon }} {{ .RepoName }}"
-        properties:
+        options:
           fetch_upstream_icon: true
       # Display the relative git path
       - type: git
@@ -94,7 +94,7 @@ blocks:
           - "{{ if gt .Behind 0 }}p:red{{ end }}"
           - "{{ if or (gt .Ahead 0) .Working.Changed .Staging.Changed }}p:fuschia{{ end }}"
         template: "{{ .HEAD }}{{ if gt .Behind 0 }} -{{ .Behind }}{{ end }}{{ if gt .Ahead 0}} +{{ .Ahead}}{{ end }}"
-        properties:
+        options:
           branch_icon: "<p:light-purple><b>\ue0a0</b></> "
           fetch_status: true
       - type: git
@@ -104,7 +104,7 @@ blocks:
         foreground: p:dark-red
         background: p:mid-red
         template: "{{ if .Working.Changed }} <p:dark-grey><b>\uf448</b></> {{ .Working.String }}{{ end }}"
-        properties:
+        options:
           fetch_status: true
       - type: git
         alias: GitStaging
@@ -113,7 +113,7 @@ blocks:
         foreground: p:dark-green
         background: p:mid-green
         template: "{{ if .Staging.Changed }} <p:dark-grey><b>\uf0c7</b></> {{ .Staging.String }}{{ end }}"
-        properties:
+        options:
           fetch_status: true
       - type: git
         alias: GitCommit
