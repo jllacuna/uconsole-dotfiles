@@ -10,9 +10,9 @@
   exact = true
   stripComponents = 1
   refreshPeriod = "168h"
-[".zsh/plugins/alias-tips"]
+[".zsh/plugins/you-should-use"]
   type = "archive"
-  url = "https://github.com/djui/alias-tips/archive/master.tar.gz"
+  url = "https://github.com/MichaelAquilina/zsh-you-should-use/archive/master.tar.gz"
   exact = true
   stripComponents = 1
   refreshPeriod = "168h"

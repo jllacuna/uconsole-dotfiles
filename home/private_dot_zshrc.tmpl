@@ -55,10 +55,10 @@ source {{ .chezmoi.homeDir }}/.cargo/env
 # Colors for ls, tree, fd, etc.
 export LS_COLORS="$(vivid generate jellybeans)"
 
-# alias-tips.plugin.zsh
-export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Try alias: "
+# you-should-use.plugin.zsh
+export YSU_MESSAGE_FORMAT=" 💡$(tput setaf 245)Try alias:$(tput sgr0) $(tput setaf 2)%alias$(tput sgr0)"
 # Won't see alias tip for clr => clear since it'll be cleared immediately
-export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="clr xit"
+export YSU_IGNORED_ALIASES=("clr" "xit")
 
 # Use fd to traverse the file system
 export FZF_DEFAULT_COMMAND='fd --type file --type dir --type symlink --color always --hidden --follow --exclude .git'
@@ -146,7 +146,7 @@ source ~/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
 
 source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/.zsh/plugins/alias-tips/alias-tips.plugin.zsh
+source ~/.zsh/plugins/you-should-use/you-should-use.plugin.zsh
 
 # zsh-syntax-highlighting
 ZSH_HIGHLIGHT_STYLES[comment]="fg=#888"
