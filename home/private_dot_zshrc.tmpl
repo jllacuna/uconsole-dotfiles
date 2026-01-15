@@ -1,23 +1,11 @@
 HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=10000
+SAVEHIST=10000
 
 setopt auto_cd extended_glob
 setopt extended_history share_history
 setopt hist_ignore_all_dups hist_save_no_dups
 setopt interactive_comments
-
-# vim mode
-bindkey -v
-
-# Change cursor shape for different vi modes.
-function zle-keymap-select () {
-  case $KEYMAP in
-    vicmd) echo -ne '\e[1 q';;      # block
-    viins|main) echo -ne '\e[5 q';; # beam
-  esac
-}
-zle -N zle-keymap-select
 
 if (( ! $fpath[(I)/usr/share/zsh/site-functions] )); then
   fpath=(/usr/share/zsh/site-functions $fpath)
@@ -147,6 +135,7 @@ source ~/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
 source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/plugins/alias-tips/alias-tips.plugin.zsh
+source ~/.zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
 # zsh-syntax-highlighting
 ZSH_HIGHLIGHT_STYLES[comment]="fg=#888"
