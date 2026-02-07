@@ -25,6 +25,7 @@ Find help tags                 | <leader>fh
 Find TODOs                     | <leader>ft
 Find diagnostics               | <leader>fd
 Find changes (git)             | <leader>fc
+Find references under cursor   | <leader>fr
 Find word under cursor         | <leader>fw
 Search and insert Nerd fonts   | <leader>fn
 Search notification history    | <leader>fo

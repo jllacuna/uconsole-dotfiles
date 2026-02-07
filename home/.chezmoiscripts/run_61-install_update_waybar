@@ -39,4 +39,4 @@ $SHIMS/pip install meson --upgrade
 cd $DEST
 git checkout tags/$TAG
 $SHIMS/meson setup build
-sudo ninja -C build install
+sudo ninja -j 2 -C build install

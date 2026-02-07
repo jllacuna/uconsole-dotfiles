@@ -85,6 +85,11 @@ keymap("n", "<leader>fd", "<cmd>Telescope diagnostics<cr>", merge({ desc = 'Find
 keymap("n", "<leader>fc", "<cmd>Telescope git_status<cr>", merge({ desc = 'Find changes (git)' }, opts))
 keymap("n", "<leader>fn", "<cmd>Telescope nerdy<cr>", merge({ desc = 'Search and insert Nerd fonts' }, opts))
 keymap("n", "<leader>fo", "<cmd>Telescope notify<cr>", merge({ desc = 'Search notification history' }, opts))
+
+vim.keymap.set("n", "<leader>fr", function()
+  require('telescope.builtin').lsp_references()
+end, { desc = "Find references under cursor" })
+
 vim.keymap.set("n", "<leader>fw", function()
   local word = vim.fn.expand("<cword>");
   local status_ok, tb = pcall(require, "telescope.builtin")
