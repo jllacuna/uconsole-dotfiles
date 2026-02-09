@@ -109,9 +109,9 @@ vim.keymap.set("n", "<leader>rn", function()
   return ":IncRename " .. vim.fn.expand("<cword>")
 end, { desc = 'Rename symbol', expr = true })
 
--- Treesitter Playground --
-keymap("n", "<leader>s", "<cmd>TSHighlightCapturesUnderCursor<cr>", merge({ desc = 'Show syntax highlight groups' }, opts))
-keymap("n", "<leader>p", "<cmd>TSPlaygroundToggle<cr>", merge({ desc = 'Toggle treesitter playground' }, opts))
+-- Treesitter Inspection --
+keymap("n", "<leader>s", "<cmd>Inspect<cr>", merge({ desc = 'Show syntax highlight groups and semantic tokens' }, opts))
+keymap("n", "<leader>p", "<cmd>InspectTree<cr>", merge({ desc = 'Show Abstract Syntax Tree (AST) in split' }, opts))
 
 -- treesj --
 keymap("n", "<leader>J", "<cmd>TSJToggle<cr>", merge({ desc = 'Toggle join/split arrays, objects, statements' }, opts))
