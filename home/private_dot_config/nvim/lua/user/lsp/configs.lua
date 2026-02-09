@@ -28,12 +28,6 @@ mason_lspconfig.setup {
   automatic_enable = false,
 }
 
-local lsp_status_ok, lspconfig = pcall(require, "lspconfig")
-if not lsp_status_ok then
-  vim.notify "lspconfig not found"
-  return
-end
-
 require("lspconfig.configs").vtsls = require("vtsls").lspconfig
 
 for _, server in pairs(servers) do
@@ -46,5 +40,6 @@ for _, server in pairs(servers) do
     opts = vim.tbl_deep_extend("force", server_custom_opts, opts)
   end
 
-  lspconfig[server].setup(opts)
+  vim.lsp.config(server, opts)
+  vim.lsp.enable(server)
 end
