@@ -20,3 +20,29 @@ fgv() {
 wd() {
   . ~/.local/share/wd/wd.sh
 }
+
+# Download and decode hex filenames automatically
+dl() {
+  local url="$1"
+  if [[ -z "$url" ]]; then
+      echo "Usage: dl <url>"
+      return 1
+  fi
+
+  # Extract the last part of the URL path
+  local encoded_filename="${url##*/}"
+  
+  # Strip any query parameters (e.g., ?id=123)
+  encoded_filename="${encoded_filename%%\?*}"
+
+  # Decode hex (e.g., %20 -> \x20)
+  local filename=$(python3 -c "import sys, urllib.parse; print(urllib.parse.unquote(sys.argv[1]))" "$encoded_filename")
+
+  # Fallback if filename is empty (e.g. url ends in /)
+  if [[ -z "$filename" ]]; then
+      filename="downloaded_file"
+  fi
+
+  echo "Downloading: $filename"
+  wget -c --waitretry=1 -O "$filename" "$url"
+}
