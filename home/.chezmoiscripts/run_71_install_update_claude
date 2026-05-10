@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+REPO="https://github.com/anthropics/claude-code"
+
+# Get latest release version
+LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
+REGEX='releases/tag/v([0-9\.]+)'
+
+[[ $LOCATION =~ $REGEX ]]
+TAG=${BASH_REMATCH[1]}
+
+CLAUDE_VERSION=$(claude --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+[[ $CLAUDE_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "claude is up-to-date: v$TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing claude: v$TAG"
+  curl -fsSL https://claude.ai/install.sh | bash
+else
+  echo "Updating claude: v$TAG"
+  claude update
+fi
