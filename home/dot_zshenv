@@ -25,8 +25,8 @@ wd() {
 dl() {
   local url="$1"
   if [[ -z "$url" ]]; then
-      echo "Usage: dl <url>"
-      return 1
+    echo "Usage: dl <url>"
+    return 1
   fi
 
   # Extract the last part of the URL path
@@ -40,9 +40,39 @@ dl() {
 
   # Fallback if filename is empty (e.g. url ends in /)
   if [[ -z "$filename" ]]; then
-      filename="downloaded_file"
+    filename="downloaded_file"
   fi
 
   echo "Downloading: $filename"
   wget -c --waitretry=1 -O "$filename" "$url"
+}
+
+# Convert markdown file to Word docx
+md2word() {
+  local input_file="$1"
+  if [[ -z "$input_file" ]]; then
+    echo "Usage: md2word <input.md> [output.docx]"
+    return 1
+  fi
+
+  # Determine output filename (uses second argument, or replaces .md with .docx)
+  local output_file="${2:-${input_file%.*}.docx}"
+
+  echo "Converting '$input_file' to '$output_file'"
+
+  # Convert with pandoc docker image
+  # Pinned to:
+  #   v3.9.0.2
+  #   Mar 30, 2026 at 3:17 am
+  #   https://hub.docker.com/layers/pandoc/core/3.9.0.2-alpine/images/sha256-1e2f9ab16e66e8d2e55a5be8a97ddcec57e882451c178f3bd55e4bcc757b308c
+  docker run --rm \
+    -v "$(pwd)":/data \
+    pandoc/core:3.9.0.2-alpine@sha256:bfca0ecc070ece31b6f56ba668446ab2dc9c973047eebb57b4d0710de8b91d0b \
+    "$input_file" -o "$output_file"
+
+  if [ $? -eq 0 ]; then
+    echo "Done"
+  else
+    echo "Conversion failed"
+  fi
 }
