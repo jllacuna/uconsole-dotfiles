@@ -31,7 +31,7 @@ dl() {
 
   # Extract the last part of the URL path
   local encoded_filename="${url##*/}"
-  
+
   # Strip any query parameters (e.g., ?id=123)
   encoded_filename="${encoded_filename%%\?*}"
 
@@ -75,4 +75,25 @@ md2word() {
   else
     echo "Conversion failed"
   fi
+}
+
+qrcode() {
+  if [[ -z "$3" ]]; then
+    echo "Usage: qrcode <blocksize> 'https://example.com' output.png"
+    return 1
+  fi
+
+  local size="$1"
+  local input_text="$2"
+  local out_file="$3"
+
+  # Generate with qrencode
+  # Pinned to:
+  #   v20260603
+  #   June 3, 2026 at 4:15 am
+  #   https://hub.docker.com/layers/backplane/qrencode/20260603/images/sha256-1d3c5fce9948af0d25fce3eb2dab8860dfa3ec7babfd2543a62879164ea8f054
+  local image_id="backplane/qrencode:20260603@sha256:f6151cdfc3c1e970b07185add917c232e33d360cf55ed9445b2649c33df8d73e"
+
+  docker run --rm -i -v "$(pwd)":/data/app -w /data/app "$image_id" -s "$size" -o "$out_file" "$input_text"
+  echo "Saved QR code to $(pwd)/$out_file (Block size: ${size}px)"
 }

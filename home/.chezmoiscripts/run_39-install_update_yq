@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+OWNER="mikefarah"
+REPO="yq"
+REPO_URL="https://github.com/$OWNER/$REPO"
+API="https://api.github.com/repos/$OWNER/$REPO/releases"
+BIN=~/.local/bin
+
+# Use a release at least 1 week old to reduce supply chain risk.
+# ISO 8601 strings sort lexicographically, so plain string comparison works.
+CUTOFF=$(date -u -d '7 days ago' +%Y-%m-%dT%H:%M:%SZ)
+
+# Parse JSON output without using jq
+TAG=$(curl -s "$API" | \
+  grep -E '^[[:space:]]*"(tag_name|published_at|draft|prerelease)"[[:space:]]*:' | \
+  awk -v cutoff="$CUTOFF" '
+    function quoted_val(line, v) {
+      v = line; sub(/^[^:]*:[[:space:]]*"/, "", v); sub(/".*$/, "", v); return v
+    }
+    function bare_val(line, v) {
+      v = line; sub(/^[^:]*:[[:space:]]*/, "", v); gsub(/[[:space:],\r]/, "", v); return v
+    }
+    /^[[:space:]]*"tag_name"[[:space:]]*:/    { tag   = quoted_val($0) }
+    /^[[:space:]]*"draft"[[:space:]]*:/       { draft = bare_val($0) }
+    /^[[:space:]]*"prerelease"[[:space:]]*:/  { pre   = bare_val($0) }
+    /^[[:space:]]*"published_at"[[:space:]]*:/ {
+      pub = quoted_val($0)
+      if (draft == "false" && pre == "false" && pub <= cutoff) {
+        sub(/^v/, "", tag); print tag; exit
+      }
+      tag = ""; draft = ""; pre = ""
+    }
+  ')
+
+if [ -z "$TAG" ]; then
+  echo "yq: No stable release older than 1 week found, skipping"
+  exit 0
+fi
+
+YQ_VERSION=$(yq --version 2>/dev/null)
+VERSION_REGEX='[0-9\.]+$'
+[[ $YQ_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "yq is up-to-date: v$TAG"
+  exit 0
+fi
+
+echo "Installing yq: v$TAG"
+
+curl --create-dirs --progress-bar -Lo $BIN/yq $REPO_URL/releases/download/v$TAG/yq_linux_arm64
+chmod 755 $BIN/yq
