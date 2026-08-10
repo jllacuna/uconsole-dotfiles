@@ -3,3 +3,6 @@
 
 # tmux startup scripts
 tmux-start
+
+# Personal per-project claude settings
+**/.claude/settings.local.json
