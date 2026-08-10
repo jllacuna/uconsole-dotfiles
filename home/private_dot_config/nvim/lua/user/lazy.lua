@@ -51,6 +51,7 @@ lazy.setup({
   -- Autopairs, integrates with both cmp and treesitter
   {
     "windwp/nvim-autopairs",
+    event = "InsertEnter",
     config = function() require("user.autopairs") end,
   },
 
@@ -288,14 +289,17 @@ lazy.setup({
   -- Treesitter: Syntax parsing for better code highlights, etc.
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     dependencies = {
       -- Complete SGML (XML, HTML, etc.) tags ]]
       "windwp/nvim-ts-autotag",
       -- Treesitter selections
-      "nvim-treesitter/nvim-treesitter-textobjects",
+      { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
       -- Changes format of comments based on location within the file. Useful for JSX and svelte
       "JoosepAlviste/nvim-ts-context-commentstring",
     },
+    lazy = false,
+    build = ":TSUpdate",
     config = function() require("user.treesitter") end,
   },
 

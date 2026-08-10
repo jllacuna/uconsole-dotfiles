@@ -107,10 +107,6 @@ nvim_tree.setup {
     update_root = false, -- do not change root if opening a file outside the current root
     ignore_list = {}, -- default
   },
-  system_open = {
-    cmd = "",  -- default
-    args = {}, -- default
-  },
   filters = {
     dotfiles = false, -- do not filter/hide dot files
     custom = {
