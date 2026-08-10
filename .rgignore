@@ -1,0 +1,4 @@
+!/home/.chezmoiscripts
+!/home/.chezmoiscripts/**
+!/home/.chezmoi.yml.tmpl
+!/home/.chezmoiexternal.toml
