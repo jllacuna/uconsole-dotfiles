@@ -23,6 +23,12 @@ local servers = {
   "yamlls",
 }
 
+-- Not managed by mason (see user/lsp/settings/<name>.lua)
+-- WARNING: Do NOT run ts7 and vtsls (above) together
+local manual_servers = {
+  -- "ts7",
+}
+
 mason_lspconfig.setup {
   ensure_installed = servers,
   automatic_enable = false,
@@ -30,7 +36,7 @@ mason_lspconfig.setup {
 
 require("lspconfig.configs").vtsls = require("vtsls").lspconfig
 
-for _, server in pairs(servers) do
+for _, server in pairs(vim.list_extend(vim.deepcopy(servers), manual_servers)) do
   local opts = {
     on_attach = require("user.lsp.handlers").on_attach,
     capabilities = require("user.lsp.handlers").capabilities,
