@@ -244,7 +244,7 @@ lazy.setup({
   -- Fuzzy finder popup
   {
     "nvim-telescope/telescope.nvim",
-    branch = "0.1.x",
+    version = "*",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function() require("user.telescope") end,
   },
