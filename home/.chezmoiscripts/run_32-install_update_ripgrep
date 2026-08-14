@@ -6,12 +6,15 @@ BIN=~/.local/bin
 MAN=~/.local/share/man/man1
 COMPLETION=~/.zsh/completion
 
-# Get latest release version
-LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
-REGEX='releases/tag/([0-9\.]+)'
+source "$CHEZMOI_WORKING_TREE/lib/github-release.sh"
 
-[[ $LOCATION =~ $REGEX ]]
-TAG=${BASH_REMATCH[1]}
+# Get latest release at least COOLDOWN_DAYS old
+TAG=$(github_release_tag "${REPO#https://github.com/}")
+
+if [ -z "$TAG" ]; then
+  echo "rg: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
 
 RG_VERSION=$(rg --version 2> /dev/null)
 VERSION_REGEX='[0-9\.]+'
@@ -23,7 +26,11 @@ if [ "$TAG" = "$CURRENT_TAG" ]; then
   exit 0
 fi
 
-echo "Installing rg: v$TAG"
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing rg: v$TAG"
+else
+  echo "Updating rg: v$TAG"
+fi
 
 FILE_STEM="ripgrep-${TAG}-aarch64-unknown-linux-gnu"
 curl --create-dirs --progress-bar -Lo $DEST/$FILE_STEM.tar.gz $REPO/releases/download/$TAG/$FILE_STEM.tar.gz

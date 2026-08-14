@@ -1,39 +1,17 @@
 #!/usr/bin/env bash
 
-OWNER="mikefarah"
-REPO="yq"
-REPO_URL="https://github.com/$OWNER/$REPO"
-API="https://api.github.com/repos/$OWNER/$REPO/releases"
+source "$CHEZMOI_WORKING_TREE/lib/github-release.sh"
+
+REPO="https://github.com/mikefarah/yq"
 BIN=~/.local/bin
+COMPLETION=~/.zsh/completion
 
-# Use a release at least 1 week old to reduce supply chain risk.
-# ISO 8601 strings sort lexicographically, so plain string comparison works.
-CUTOFF=$(date -u -d '7 days ago' +%Y-%m-%dT%H:%M:%SZ)
-
-# Parse JSON output without using jq
-TAG=$(curl -s "$API" | \
-  grep -E '^[[:space:]]*"(tag_name|published_at|draft|prerelease)"[[:space:]]*:' | \
-  awk -v cutoff="$CUTOFF" '
-    function quoted_val(line, v) {
-      v = line; sub(/^[^:]*:[[:space:]]*"/, "", v); sub(/".*$/, "", v); return v
-    }
-    function bare_val(line, v) {
-      v = line; sub(/^[^:]*:[[:space:]]*/, "", v); gsub(/[[:space:],\r]/, "", v); return v
-    }
-    /^[[:space:]]*"tag_name"[[:space:]]*:/    { tag   = quoted_val($0) }
-    /^[[:space:]]*"draft"[[:space:]]*:/       { draft = bare_val($0) }
-    /^[[:space:]]*"prerelease"[[:space:]]*:/  { pre   = bare_val($0) }
-    /^[[:space:]]*"published_at"[[:space:]]*:/ {
-      pub = quoted_val($0)
-      if (draft == "false" && pre == "false" && pub <= cutoff) {
-        sub(/^v/, "", tag); print tag; exit
-      }
-      tag = ""; draft = ""; pre = ""
-    }
-  ')
+# Get latest release at least COOLDOWN_DAYS old
+TAG=$(github_release_tag "${REPO#https://github.com/}")
+TAG=${TAG#v}
 
 if [ -z "$TAG" ]; then
-  echo "yq: No stable release older than 1 week found, skipping"
+  echo "yq: no release at least $COOLDOWN_DAYS days old found, skipping"
   exit 0
 fi
 
@@ -47,7 +25,30 @@ if [ "$TAG" = "$CURRENT_TAG" ]; then
   exit 0
 fi
 
-echo "Installing yq: v$TAG"
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing yq: v$TAG"
+else
+  echo "Updating yq: v$TAG"
+fi
 
-curl --create-dirs --progress-bar -Lo $BIN/yq $REPO_URL/releases/download/v$TAG/yq_linux_arm64
+ASSET=yq_linux_arm64
+curl --create-dirs --progress-bar -Lo $BIN/$ASSET.download $REPO/releases/download/v$TAG/$ASSET
+
+# Validate the checksum. yq packs every hash algorithm into one file, in the
+# column order listed in checksums_hashes_order.
+HASH_LINE=$(curl -sL $REPO/releases/download/v$TAG/checksums_hashes_order | grep -n '^SHA-256$' | cut -d: -f1)
+FIELD=$((HASH_LINE + 1))
+SHA256=$(sha256sum $BIN/$ASSET.download | cut -d' ' -f1)
+CHECKSUM=$(curl -sL $REPO/releases/download/v$TAG/checksums | grep "$ASSET\s" | sed 's/  /\t/g' | cut -f$FIELD)
+
+if [[ "$SHA256" != "$CHECKSUM" ]]; then
+  echo "yq checksums do NOT match"
+  rm $BIN/$ASSET.download
+  exit 1
+fi
+
+mv $BIN/$ASSET.download $BIN/yq
 chmod 755 $BIN/yq
+
+# Generate completions
+$BIN/yq shell-completion zsh > $COMPLETION/_yq

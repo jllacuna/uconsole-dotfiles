@@ -35,7 +35,7 @@ export LANG=en_US.UTF-8
 export EDITOR=nvim
 
 if [[ ! "$PATH" == *{{ .chezmoi.homeDir }}/.local/bin* ]]; then
-  PATH="${PATH:+${PATH}:}{{ .chezmoi.homeDir }}/.local/bin"
+  PATH="{{ .chezmoi.homeDir }}/.local/bin${PATH:+:${PATH}}"
 fi
 
 # golang
@@ -79,9 +79,6 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 # ripgrep config
 export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgrep/ripgreprc"
 
-# wd config
-export WD_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/wd/warprc"
-
 # zoxide config -- Use eza to preview directories when using fzf to find a directory
 export _ZO_FZF_OPTS="--ansi --layout=reverse --height=~50% --preview='eza --color=always --icons always --grid {2}' --preview-window=down,border-top"
 
@@ -112,13 +109,6 @@ alias -g -- --help='--help 2>&1 | bat -l help --style=plain'
 # Fuzzy find files (with preview) and open them in nvim
 alias ffv='fd --type file --color always --hidden --exclude .git | fzf --multi --bind "f1:toggle-all" --bind "enter:become(nvim {+})" --preview "bat --color=always --style=numbers,changes --line-range=:200 {}"'
 
-# aliases to make wd feel like bashmarks
-alias g='wd'
-alias s='wd add'
-alias d='wd rm'
-alias l='wd list'
-alias p='wd path'
-
 # alias nvim
 alias e='nvim'
 
@@ -131,14 +121,6 @@ eval "$(zoxide init --cmd cd zsh)"
 
 # Oh My Posh
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/jellybeans.omp.yml)"
-
-# nvm
-export NVM_DIR="{{ .chezmoi.homeDir }}/.local/share/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-
-# pyenv
-export PYENV_ROOT="{{ .chezmoi.homeDir }}/.local/share/pyenv"
-eval "$(pyenv init -)"
 
 # WARNING: fzf-tab needs to be loaded after compinit but before syntax highlighting and autosuggestions
 # https://github.com/Aloxaf/fzf-tab?tab=readme-ov-file#install

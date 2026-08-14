@@ -2,10 +2,26 @@
 {{ $bitbucketEmail := promptString "Bitbucket email" -}}
 {{ $bitbucketSubdomain := promptString "Bitbucket subdomain" -}}
 {{ $githubEmail := promptString "Github private email" -}}
+{{ $scriptPath := concat
+     (list
+       ($.chezmoi.homeDir | printf "%s/.local/bin")
+       ($.chezmoi.homeDir | printf "%s/.local/share/go/bin")
+       ($.chezmoi.homeDir | printf "%s/go/bin")
+       ($.chezmoi.homeDir | printf "%s/.cargo/bin"))
+     (env "PATH" | splitList ":")
+   | uniq
+   | join ":" -}}
+
 encryption: age
 age:
   identity: ~/.config/chezmoi/key.txt
   recipient: age1q32r2jvahhvhhdn6f9t7acwmna2ed6t53gnnac0r5wcn60jd0urqkgcd07
+
+# scriptEnv applies to every script chezmoi runs AND every template (e.g. .chezmoiexternal.toml)
+# Ensures run script installed tools are always resolvable (e.g. jq, uv, cargo installs, go and go installs)
+scriptEnv:
+  PATH: "{{ $scriptPath }}"
+
 data:
   fullName: {{ $fullName }}
   nerdFont: Hack

@@ -15,12 +15,6 @@ fgv() {
   fi
 }
 
-# "Warp" to named directories
-# https://github.com/mfaerevaag/wd
-wd() {
-  . ~/.local/share/wd/wd.sh
-}
-
 # Download and decode hex filenames automatically
 dl() {
   local url="$1"

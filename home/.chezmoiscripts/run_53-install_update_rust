@@ -1,57 +1,57 @@
 #!/usr/bin/env bash
 
-RUSTUP_TAGS_API="https://api.github.com/repos/rust-lang/rustup/tags"
-RUST_REPO="https://github.com/rust-lang/rust"
+source "$CHEZMOI_WORKING_TREE/lib/github-release.sh"
+
+RUSTUP_REPO="rust-lang/rustup"
+TARGET="aarch64-unknown-linux-gnu"
 CARGO_BIN=~/.cargo/bin
-jq=~/.local/bin/jq
 
-# Get latest rustup release version
-RUSTUP_TAG=$(curl -Ls $RUSTUP_TAGS_API | $jq -r '.[0].name')
+# rustup has no GitHub releases, only tags
+RUSTUP_TAG=$(github_tag_before "$RUSTUP_REPO")
 
-# Get latest rust release version
-LOCATION=$(curl -si $RUST_REPO/releases/latest | grep -i 'location:*')
-REGEX='releases/tag/([0-9\.]+)'
-
-[[ $LOCATION =~ $REGEX ]]
-RUST_TAG=${BASH_REMATCH[1]}
+if [ -z "$RUSTUP_TAG" ]; then
+  echo "rustup: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
 
 RUSTUP_VERSION=$(rustup --version 2> /dev/null)
 VERSION_REGEX='[0-9\.]+'
 [[ $RUSTUP_VERSION =~ $VERSION_REGEX ]]
 RUSTUP_CURRENT_TAG=${BASH_REMATCH[0]}
 
-RUST_VERSION=$(rustc --version 2> /dev/null)
-[[ $RUST_VERSION =~ $VERSION_REGEX ]]
-RUST_CURRENT_TAG=${BASH_REMATCH[0]}
-
 if [ "$RUSTUP_TAG" = "$RUSTUP_CURRENT_TAG" ]; then
   echo "rustup is up-to-date: v$RUSTUP_TAG"
-fi
-
-if [ "$RUST_TAG" = "$RUST_CURRENT_TAG" ]; then
-  echo "rust is up-to-date: v$RUST_TAG"
-fi
-
-if [ "$RUSTUP_TAG" = "$RUSTUP_CURRENT_TAG" -a "$RUST_TAG" = "$RUST_CURRENT_TAG" ]; then
-  exit 0
-fi
-
-if [ -z "$RUSTUP_CURRENT_TAG" ]; then
-  echo "Installing rustup: v$RUSTUP_TAG"
-  echo "Installing rust: v$RUST_TAG"
-
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
 else
-  if [ "$RUSTUP_TAG" != "$RUSTUP_CURRENT_TAG" ]; then
+  if [ -z "$RUSTUP_CURRENT_TAG" ]; then
+    echo "Installing rustup: v$RUSTUP_TAG"
+  else
     echo "Updating rustup: v$RUSTUP_TAG"
   fi
 
-  if [ "$RUST_TAG" != "$RUST_CURRENT_TAG" ]; then
-    echo "Updating rust: v$RUST_TAG"
+  TMP=$(mktemp -d)
+  ASSET_URL="https://static.rust-lang.org/rustup/archive/$RUSTUP_TAG/$TARGET/rustup-init"
+  curl --progress-bar -Lo $TMP/rustup-init "$ASSET_URL"
+
+  # Validate the checksum
+  SHA256=$(sha256sum $TMP/rustup-init | cut -d' ' -f1)
+  CHECKSUM=$(curl -sL "$ASSET_URL.sha256" | cut -d' ' -f1)
+
+  if [[ "$SHA256" != "$CHECKSUM" ]]; then
+    echo "rustup checksums do NOT match"
+    rm -fr $TMP
+    exit 1
   fi
 
-  rustup update
+  chmod 755 $TMP/rustup-init
+  $TMP/rustup-init -y --no-modify-path
+  rm -fr $TMP
 fi
+
+# The rust toolchain itself isn't cooldown-gated: it's distributed from
+# static.rust-lang.org by the Rust project's own release infrastructure, not
+# a GitHub-Actions-released project, and rustup verifies each component's
+# checksum against the channel manifest itself.
+$CARGO_BIN/rustup update
 
 # Install completions
 # bash

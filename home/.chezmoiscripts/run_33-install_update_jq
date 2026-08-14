@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
 
+source "$CHEZMOI_WORKING_TREE/lib/github-release.sh"
+
 REPO="https://github.com/jqlang/jq"
 BIN=~/.local/bin
 
-# Get latest release version
-LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
-REGEX='releases/tag/jq-([0-9\.]+)'
+# NOTE: Installs jq alongside the apt-installed jq (a dependency for cooldown scripts in lib). The apt-installed jq is removed in a final script after files have been applied
+TAG=$(github_release_tag "${REPO#https://github.com/}")
+TAG=${TAG#jq-}
 
-[[ $LOCATION =~ $REGEX ]]
-TAG=${BASH_REMATCH[1]}
+if [ -z "$TAG" ]; then
+  echo "jq: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
 
-JQ_VERSION=$(jq --version 2> /dev/null)
-VERSION_REGEX='[0-9\.]+'
+JQ_VERSION=$($BIN/jq --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+$'
 [[ $JQ_VERSION =~ $VERSION_REGEX ]]
 CURRENT_TAG=${BASH_REMATCH[0]}
 
@@ -20,7 +24,24 @@ if [ "$TAG" = "$CURRENT_TAG" ]; then
   exit 0
 fi
 
-echo "Installing jq: v$TAG"
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing jq: v$TAG"
+else
+  echo "Updating jq: v$TAG"
+fi
 
-curl --create-dirs --progress-bar -Lo $BIN/jq $REPO/releases/download/jq-$TAG/jq-linux-arm64
+ASSET=jq-linux-arm64
+curl --create-dirs --progress-bar -Lo $BIN/$ASSET.download $REPO/releases/download/jq-$TAG/$ASSET
+
+# Validate the checksum
+SHA256=$(sha256sum $BIN/$ASSET.download | cut -d' ' -f1)
+CHECKSUM=$(curl -sL $REPO/releases/download/jq-$TAG/sha256sum.txt | grep "$ASSET\$" | cut -d' ' -f1)
+
+if [[ "$SHA256" != "$CHECKSUM" ]]; then
+  echo "jq checksums do NOT match"
+  rm $BIN/$ASSET.download
+  exit 1
+fi
+
+mv $BIN/$ASSET.download $BIN/jq
 chmod 755 $BIN/jq

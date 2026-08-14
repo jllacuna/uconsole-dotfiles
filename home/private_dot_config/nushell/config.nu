@@ -36,9 +36,6 @@ $env.config.completions.algorithm = "fuzzy"
 # History
 $env.config.history.file_format = "sqlite" # sqlite has more capabilities than plaintext
 
-# Directory bookmarks, similar to bashmarks or wd
-source ~/.config/nushell/bookmark_for_dir.nu
-
 # Zoxide
 source ~/.config/nushell/.zoxide.nu
 
@@ -59,12 +56,6 @@ alias cat = bat --paging=never
 def syslog [] { ^journalctl -f | bat --paging=never -l log --style plain }
 # Fuzzy find files (with preview) and open them in nvim
 def ffv [] { ^fd --type file --color always --hidden --exclude .git | fzf --multi --bind "f1:toggle-all" --bind "enter:become(nvim {+})" --preview "bat --color=always --style=numbers,changes --line-range=:200 {}" }
-
-# Aliases to make bookmark_for_dir.nu feel like bashmarks
-alias g = bm
-alias s = bm -a
-alias d = bm -d
-alias l = bm
 
 # Alias nvim
 alias e = nvim

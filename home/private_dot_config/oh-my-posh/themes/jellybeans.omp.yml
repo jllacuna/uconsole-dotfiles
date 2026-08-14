@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 upgrade:
   # Display an upgrade notice on shell start
-  notice: true
+  notice: false
   # Automatically upgrade minor versions
   auto: false
   # Interval to check for upgrades (default: 24h)

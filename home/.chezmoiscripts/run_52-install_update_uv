@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+source "$CHEZMOI_WORKING_TREE/lib/github-release.sh"
+
+REPO="astral-sh/uv"
+TARGET="aarch64-unknown-linux-gnu"
+BIN=~/.local/bin
+
+# Get latest release at least COOLDOWN_DAYS old
+TAG=$(github_release_tag "$REPO")
+
+if [ -z "$TAG" ]; then
+  echo "uv: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
+
+UV_VERSION=$(uv --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+
+[[ $UV_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "uv is up-to-date: v$TAG"
+else
+  if [ -z "$CURRENT_TAG" ]; then
+    echo "Installing uv: v$TAG"
+  else
+    echo "Updating uv: v$TAG"
+  fi
+
+  TMP=$(mktemp -d)
+  ASSET="uv-$TARGET.tar.gz"
+  ASSET_URL="https://github.com/$REPO/releases/download/$TAG/$ASSET"
+  curl --progress-bar -Lo $TMP/$ASSET "$ASSET_URL"
+
+  # Validate the checksum
+  SHA256=$(sha256sum $TMP/$ASSET | cut -d' ' -f1)
+  CHECKSUM=$(curl -sL "$ASSET_URL.sha256" | cut -d' ' -f1)
+
+  if [[ "$SHA256" != "$CHECKSUM" ]]; then
+    echo "uv checksums do NOT match"
+    rm -fr $TMP
+    exit 1
+  fi
+
+  mkdir -p $BIN
+  tar -xzf $TMP/$ASSET -C $TMP
+  install -m 755 $TMP/uv-$TARGET/uv $TMP/uv-$TARGET/uvx $BIN/
+  rm -fr $TMP
+fi
+
+# Install a default python3/python on PATH ($BIN)
+# Each uv release pins an exact set of python builds at its own build time
+# Therefore the python builds it can fetch are cooldown-gated by gating uv
+$BIN/uv python install --default 3

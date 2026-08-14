@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+source "$CHEZMOI_WORKING_TREE/lib/github-release.sh"
+
+REPO="anthropics/claude-code"
+DOWNLOAD_BASE="https://downloads.claude.ai/claude-code-releases"
+PLATFORM="linux-arm64"
+
+# Get latest release at least COOLDOWN_DAYS old
+TAG=$(github_release_tag "$REPO")
+TAG=${TAG#v}
+
+if [ -z "$TAG" ]; then
+  echo "claude: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
+
+CLAUDE_VERSION=$(claude --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+[[ $CLAUDE_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "claude is up-to-date: v$TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing claude: v$TAG"
+else
+  echo "Updating claude: v$TAG"
+fi
+
+# Bypass claude.ai/install.sh (an unpinned, unverified curl-pipe-to-bash that always fetches whatever's newest)
+# Replicate its own steps directly, pinned to our cooldown-eligible TAG instead
+MANIFEST=$(curl -sL "$DOWNLOAD_BASE/$TAG/manifest.json")
+CHECKSUM=$(echo "$MANIFEST" | jq -r --arg p "$PLATFORM" '.platforms[$p].checksum // empty')
+
+if [ -z "$CHECKSUM" ]; then
+  echo "claude: platform $PLATFORM not found in manifest for v$TAG"
+  exit 1
+fi
+
+TMP=$(mktemp -d)
+curl --progress-bar -Lo "$TMP/claude" "$DOWNLOAD_BASE/$TAG/$PLATFORM/claude"
+
+# Validate the checksum
+SHA256=$(sha256sum "$TMP/claude" | cut -d' ' -f1)
+
+if [[ "$SHA256" != "$CHECKSUM" ]]; then
+  echo "claude checksums do NOT match"
+  rm -fr "$TMP"
+  exit 1
+fi
+
+chmod +x "$TMP/claude"
+
+# Run the verified binary's own installer to set up the launcher and shell
+# integration, pinned to the exact version just verified above
+"$TMP/claude" install "$TAG"
+
+rm -fr "$TMP"

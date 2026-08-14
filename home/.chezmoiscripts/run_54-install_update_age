@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+source "$CHEZMOI_WORKING_TREE/lib/github-release.sh"
+
+REPO="https://github.com/FiloSottile/age"
+DEST=~/.local/share
+BIN=~/.local/bin
+GO_BIN=~/go/bin
+
+# Get latest release at least COOLDOWN_DAYS old
+TAG=$(github_release_tag "${REPO#https://github.com/}")
+
+if [ -z "$TAG" ]; then
+  echo "age: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
+
+AGE_VERSION=$(age --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+[[ $AGE_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=v${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "age is up-to-date: $TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing age: $TAG"
+else
+  echo "Updating age: $TAG"
+fi
+
+# Verify age with sigsum proofs
+
+# Install sigsum-verify (also at least COOLDOWN_DAYS old)
+SIGSUM_GO_TAG=$(github_tag_before sigsum/sigsum-go main)
+if [ -n "$SIGSUM_GO_TAG" ]; then
+  echo "Installing sigsum-verify: $SIGSUM_GO_TAG"
+  ~/.local/share/go/bin/go install "sigsum.org/sigsum-go/cmd/sigsum-verify@$SIGSUM_GO_TAG"
+fi
+
+FILE_STEM="age-${TAG}-linux-arm64"
+curl --create-dirs --progress-bar -Lo $DEST/$FILE_STEM.tar.gz $REPO/releases/download/$TAG/$FILE_STEM.tar.gz
+curl -sL -o $DEST/$FILE_STEM.tar.gz.proof $REPO/releases/download/$TAG/$FILE_STEM.tar.gz.proof
+
+# Verify the sigsum proof against age's pinned public keys
+# sigsum-generic-2025-1 is a named policy built into sigsum-verify itself since sigsum-go v0.13.0, no separate policy file needed
+if [ -x $GO_BIN/sigsum-verify ]; then
+  if ! $GO_BIN/sigsum-verify -k "$CHEZMOI_WORKING_TREE/keys/age-sigsum-key.pub" -P sigsum-generic-2025-1 \
+    "$DEST/$FILE_STEM.tar.gz.proof" < "$DEST/$FILE_STEM.tar.gz"; then
+    echo "age sigsum proof verification FAILED"
+    rm -f $DEST/$FILE_STEM.tar.gz $DEST/$FILE_STEM.tar.gz.proof
+    exit 1
+  fi
+else
+  echo "age: sigsum-verify not available, skipping proof verification" >&2
+fi
+
+# Remove existing install
+rm -fr $DEST/age
+rm -f $BIN/age $BIN/age-keygen $BIN/age-inspect $BIN/age-plugin-batchpass
+
+# Extract the tarball (already wrapped in an "age/" directory)
+cd $DEST && tar xzf $FILE_STEM.tar.gz && rm $FILE_STEM.tar.gz
+
+# Symlink the commands
+mkdir -p $BIN && cd $BIN
+ln -s $DEST/age/age age
+ln -s $DEST/age/age-keygen age-keygen
+ln -s $DEST/age/age-inspect age-inspect
+ln -s $DEST/age/age-plugin-batchpass age-plugin-batchpass

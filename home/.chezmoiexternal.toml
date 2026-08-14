@@ -1,24 +1,30 @@
+{{- $ghLib := printf "%s/lib/github-release.sh" .chezmoi.workingTree }}
+
+{{- $zshSyntaxHighlightingSha := output "bash" "-c" (printf "source %s; github_commit_before zsh-users/zsh-syntax-highlighting master" $ghLib) | trim }}
 [".zsh/plugins/zsh-syntax-highlighting"]
   type = "archive"
-  url = "https://github.com/zsh-users/zsh-syntax-highlighting/archive/master.tar.gz"
+  url = "https://github.com/zsh-users/zsh-syntax-highlighting/archive/{{ $zshSyntaxHighlightingSha }}.tar.gz"
   exact = true
   stripComponents = 1
   refreshPeriod = "168h"
+{{- $zshAutosuggestionsSha := output "bash" "-c" (printf "source %s; github_commit_before zsh-users/zsh-autosuggestions master" $ghLib) | trim }}
 [".zsh/plugins/zsh-autosuggestions"]
   type = "archive"
-  url = "https://github.com/zsh-users/zsh-autosuggestions/archive/master.tar.gz"
+  url = "https://github.com/zsh-users/zsh-autosuggestions/archive/{{ $zshAutosuggestionsSha }}.tar.gz"
   exact = true
   stripComponents = 1
   refreshPeriod = "168h"
+{{- $youShouldUseSha := output "bash" "-c" (printf "source %s; github_commit_before MichaelAquilina/zsh-you-should-use master" $ghLib) | trim }}
 [".zsh/plugins/you-should-use"]
   type = "archive"
-  url = "https://github.com/MichaelAquilina/zsh-you-should-use/archive/master.tar.gz"
+  url = "https://github.com/MichaelAquilina/zsh-you-should-use/archive/{{ $youShouldUseSha }}.tar.gz"
   exact = true
   stripComponents = 1
   refreshPeriod = "168h"
+{{- $fzfTabSha := output "bash" "-c" (printf "source %s; github_commit_before Aloxaf/fzf-tab master" $ghLib) | trim }}
 [".zsh/plugins/fzf-tab"]
   type = "archive"
-  url = "https://github.com/Aloxaf/fzf-tab/archive/master.tar.gz"
+  url = "https://github.com/Aloxaf/fzf-tab/archive/{{ $fzfTabSha }}.tar.gz"
   exact = true
   stripComponents = 1
   refreshPeriod = "168h"
@@ -70,9 +76,4 @@
   type = "file"
   readonly = true
   url = "https://raw.githubusercontent.com/gerardroche/sublime-tmux/refs/heads/master/Tmux.sublime-syntax"
-  refreshPeriod = "168h"
-[".config/nushell/bookmark_for_dir.nu"]
-  type = "file"
-  readonly = true
-  url = "https://raw.githubusercontent.com/yh17549/nu-dir-bookmark/refs/heads/main/bookmark_for_dir.nu"
   refreshPeriod = "168h"

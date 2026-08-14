@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+source "$CHEZMOI_WORKING_TREE/lib/github-release.sh"
+
+REPO="https://github.com/jesseduffield/lazygit"
+DEST=~/.local/share
+BIN=~/.local/bin
+
+# Get latest release at least COOLDOWN_DAYS old
+TAG=$(github_release_tag "${REPO#https://github.com/}")
+TAG=${TAG#v}
+
+if [ -z "$TAG" ]; then
+  echo "lazygit: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
+
+LAZYGIT_VERSION=$(lazygit --version 2> /dev/null)
+VERSION_REGEX='version=([0-9.]+)'
+[[ $LAZYGIT_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[1]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "lazygit is up-to-date: v$TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing lazygit: v$TAG"
+else
+  echo "Updating lazygit: v$TAG"
+fi
+
+FILE_STEM="lazygit_${TAG}_linux_arm64"
+curl --create-dirs --progress-bar -Lo $DEST/$FILE_STEM.tar.gz $REPO/releases/download/v$TAG/$FILE_STEM.tar.gz
+
+# Validate the checksum
+SHA256=$(cd $DEST && sha256sum $FILE_STEM.tar.gz)
+CHECKSUM=$(curl -sL $REPO/releases/download/v$TAG/checksums.txt | grep $FILE_STEM.tar.gz)
+
+if [[ "$SHA256" != "$CHECKSUM" ]]; then
+  echo "lazygit checksums do NOT match"
+  rm $DEST/$FILE_STEM.tar.gz
+  exit 1
+fi
+
+# Remove existing install
+rm -fr $DEST/lazygit
+rm -f $BIN/lazygit
+
+# Extract the tarball
+mkdir -p $DEST/lazygit && cd $DEST && tar xzf $FILE_STEM.tar.gz -C lazygit && rm $FILE_STEM.tar.gz
+
+# Symlink the command
+mkdir -p $BIN && cd $BIN && ln -s $DEST/lazygit/lazygit lazygit

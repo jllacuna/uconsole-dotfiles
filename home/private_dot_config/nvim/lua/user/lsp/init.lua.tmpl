@@ -1,0 +1,30 @@
+{{- $ghLib := printf "%s/lib/github-release.sh" .chezmoi.workingTree }}
+{{- $masonRegistryTag := output "bash" "-c" (printf "source %s; github_release_tag mason-org/mason-registry" $ghLib) | trim }}
+{{- $masonRegistrySpec := "github:mason-org/mason-registry" }}
+{{- if $masonRegistryTag }}
+{{- $masonRegistrySpec = printf "github:mason-org/mason-registry@%s" $masonRegistryTag }}
+{{- end }}
+local mason_status_ok, mason = pcall(require, "mason")
+if not mason_status_ok then
+  vim.notify "mason not found"
+  return
+end
+
+mason.setup {
+  -- Only use a registry spec at least COOLDOWN_DAYS ago
+  -- Ensures server versions are also at least COOLDOWN_DAYS ago
+  -- Falls back to the default unpinned registry if no qualifying release is found
+  registries = {
+    "{{ $masonRegistrySpec }}",
+  },
+  ui ={
+    icons = {
+      package_installed = "",
+      package_pending = "",
+      package_uninstalled = ""
+    }
+  }
+}
+
+require "user.lsp.configs"
+require("user.lsp.handlers").setup()

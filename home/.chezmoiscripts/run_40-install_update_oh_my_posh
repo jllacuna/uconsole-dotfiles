@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+source "$CHEZMOI_WORKING_TREE/lib/github-release.sh"
+
+REPO="https://github.com/JanDeDobbeleer/oh-my-posh"
+BIN=~/.local/bin
+
+# Get latest release at least COOLDOWN_DAYS old
+TAG=$(github_release_tag "${REPO#https://github.com/}")
+TAG=${TAG#v}
+
+if [ -z "$TAG" ]; then
+  echo "oh-my-posh: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
+
+OH_MY_POSH_VERSION=$(oh-my-posh version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+[[ $OH_MY_POSH_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "oh-my-posh is up-to-date: v$TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing oh-my-posh: v$TAG"
+else
+  echo "Updating oh-my-posh: v$TAG"
+fi
+
+ASSET=posh-linux-arm64
+curl --create-dirs --progress-bar -Lo $BIN/$ASSET.download $REPO/releases/download/v$TAG/$ASSET
+
+# Validate the checksum
+SHA256=$(sha256sum $BIN/$ASSET.download | cut -d' ' -f1)
+CHECKSUM=$(curl -sL $REPO/releases/download/v$TAG/checksums.txt | grep "$ASSET\$" | cut -d' ' -f1)
+
+if [[ "$SHA256" != "$CHECKSUM" ]]; then
+  echo "oh-my-posh checksums do NOT match"
+  rm $BIN/$ASSET.download
+  exit 1
+fi
+
+mv $BIN/$ASSET.download $BIN/oh-my-posh
+chmod 755 $BIN/oh-my-posh

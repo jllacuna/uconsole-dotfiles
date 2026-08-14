@@ -1,30 +1,35 @@
 #!/usr/bin/env bash
 
-TAGS_API="https://api.github.com/repos/andreafrancia/trash-cli/tags"
-SHIMS=~/.local/share/pyenv/shims
-jq=~/.local/bin/jq
+source "$CHEZMOI_WORKING_TREE/lib/pypi-release.sh"
 
-# Get latest release version
-TAG=$(curl -Ls $TAGS_API | $jq -r '.[0].name')
+BIN=~/.local/bin
 
-CURRENT_TAG=$(trash --version 2> /dev/null)
+# Get latest trash-cli version at least COOLDOWN_DAYS old
+VERSION=$(pypi_package_version trash-cli)
 
-if [ "$TAG" = "$CURRENT_TAG" ]; then
-  echo "trash-cli is up-to-date: v$TAG"
+if [ -z "$VERSION" ]; then
+  echo "trash-cli: no release at least $COOLDOWN_DAYS days old found, skipping"
   exit 0
 fi
 
-if [ -z "$CURRENT_TAG" ]; then
-  echo "Installing trash-cli: v$TAG"
-else
-  echo "Updating trash-cli: v$TAG"
+CURRENT_VERSION=$($BIN/trash --version 2> /dev/null)
+
+if [ "$VERSION" = "$CURRENT_VERSION" ]; then
+  echo "trash-cli is up-to-date: v$VERSION"
+  exit 0
 fi
 
-$SHIMS/pip install trash-cli 'trash-cli[completion]' --upgrade
+if [ -z "$CURRENT_VERSION" ]; then
+  echo "Installing trash-cli: v$VERSION"
+  $BIN/uv tool install "trash-cli[completion]==$VERSION"
+else
+  echo "Updating trash-cli: v$VERSION"
+  $BIN/uv tool upgrade "trash-cli==$VERSION"
+fi
 
 # Set up completions
 cmds=(trash-empty trash-list trash-restore trash-put trash)
 for cmd in ${cmds[@]}; do
-  $SHIMS/$cmd --print-completion bash | sudo tee /usr/share/bash-completion/completions/$cmd > /dev/null
-  $SHIMS/$cmd --print-completion zsh | sudo tee /usr/share/zsh/site-functions/_$cmd > /dev/null
+  $BIN/$cmd --print-completion bash | sudo tee /usr/share/bash-completion/completions/$cmd > /dev/null
+  $BIN/$cmd --print-completion zsh | sudo tee /usr/share/zsh/site-functions/_$cmd > /dev/null
 done

@@ -1,5 +1,17 @@
 {
   "theme": "dark",
   "editorMode": "vim",
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "remoteControlAtStartup": true,
+  "env": {
+    "DISABLE_AUTOUPDATER": "1"
+  },
+  "autoUpdatesChannel": "stable",
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "WebFetch",
+      "WebSearch"
+    ]
+  }
 }

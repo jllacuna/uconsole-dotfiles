@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Remove apt-installed jq
+# Replaced by jq installed from GitHub releases in an earlier script
+# WARNING: Must be run as the last script after files have been applied. Cooldown scripts in lib have a jq dependency
+if dpkg -s jq &> /dev/null; then
+  echo "Removing apt-installed jq"
+  sudo apt remove -y jq
+  hash -r
+fi

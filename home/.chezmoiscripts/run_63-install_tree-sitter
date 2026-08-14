@@ -1,28 +1,29 @@
 #!/usr/bin/env bash
 
-REPO="https://github.com/tree-sitter/tree-sitter"
+source "$CHEZMOI_WORKING_TREE/lib/cargo-release.sh"
 
-# Get latest release version
-LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
-REGEX='releases/tag/v([0-9\.]+)'
+# Get latest crate version at least COOLDOWN_DAYS old
+VERSION=$(cargo_crate_version tree-sitter-cli)
 
-[[ $LOCATION =~ $REGEX ]]
-TAG=${BASH_REMATCH[1]}
+if [ -z "$VERSION" ]; then
+  echo "tree-sitter: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
 
 TREESITTER_VERSION=$(tree-sitter --version 2> /dev/null)
 VERSION_REGEX='[0-9\.]+'
 [[ $TREESITTER_VERSION =~ $VERSION_REGEX ]]
-CURRENT_TAG=${BASH_REMATCH[0]}
+CURRENT_VERSION=${BASH_REMATCH[0]}
 
-if [ "$TAG" = "$CURRENT_TAG" ]; then
-  echo "tree-sitter is up-to-date: v$TAG"
+if [ "$VERSION" = "$CURRENT_VERSION" ]; then
+  echo "tree-sitter is up-to-date: v$VERSION"
   exit 0
 fi
 
-if [ -z "$CURRENT_TAG" ]; then
-  echo "Installing tree-sitter: v$TAG"
+if [ -z "$CURRENT_VERSION" ]; then
+  echo "Installing tree-sitter: v$VERSION"
 else
-  echo "Updating tree-sitter: v$TAG"
+  echo "Updating tree-sitter: v$VERSION"
 fi
 
-~/.cargo/bin/cargo install tree-sitter-cli
+~/.cargo/bin/cargo install --locked tree-sitter-cli --version $VERSION

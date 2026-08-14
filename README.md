@@ -15,6 +15,16 @@ When you run `chezmoi init`, you will be prompted for some information
 
 In addition, the first time you run `chezmoi apply`, you will be prompted for the [age](https://github.com/FiloSottile/age) passphrase to `key.txt.age`
 
+## <a name="github-api-rate-limits">GitHub API rate limits</a>
+
+Add an optional GitHub [personal access token](https://github.com/settings/personal-access-tokens) (fine-grained, public read-only, no permissions) if running into GitHub API rate limits.
+
+```
+echo -n "<pat>" | chezmoi encrypt --output lib/github-token.age
+```
+
+This age-encrypts the token to `lib/github-token.age`.
+
 ## Setup steps
 1. Flash [ClockworkPi bookworm](https://forum.clockworkpi.com/t/bookworm-6-6-y-for-the-uconsole-and-devterm/13235) (or latest) Lite OS to MicroSD card
 1. Boot up with MicroSD card

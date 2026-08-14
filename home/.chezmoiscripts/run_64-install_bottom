@@ -1,38 +1,42 @@
 #!/usr/bin/env bash
 
+source "$CHEZMOI_WORKING_TREE/lib/cargo-release.sh"
+
 REPO="https://github.com/ClementTsang/bottom"
 
-# Get latest release version
-LOCATION=$(curl -si $REPO/releases/latest | grep -i 'location:*')
-REGEX='releases/tag/([0-9\.]+)'
+# Get latest crate version at least COOLDOWN_DAYS old
+VERSION=$(cargo_crate_version bottom)
 
-[[ $LOCATION =~ $REGEX ]]
-TAG=${BASH_REMATCH[1]}
+if [ -z "$VERSION" ]; then
+  echo "bottom: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
 
 BOTTOM_VERSION=$(btm --version 2> /dev/null)
 VERSION_REGEX='[0-9\.]+'
 [[ $BOTTOM_VERSION =~ $VERSION_REGEX ]]
-CURRENT_TAG=${BASH_REMATCH[0]}
+CURRENT_VERSION=${BASH_REMATCH[0]}
 
-if [ "$TAG" = "$CURRENT_TAG" ]; then
-  echo "bottom is up-to-date: v$TAG"
+if [ "$VERSION" = "$CURRENT_VERSION" ]; then
+  echo "bottom is up-to-date: v$VERSION"
   exit 0
 fi
 
-if [ -z "$CURRENT_TAG" ]; then
-  echo "Installing bottom: v$TAG"
+if [ -z "$CURRENT_VERSION" ]; then
+  echo "Installing bottom: v$VERSION"
 else
-  echo "Updating bottom: v$TAG"
+  echo "Updating bottom: v$VERSION"
 fi
 
-~/.cargo/bin/cargo install bottom
+~/.cargo/bin/cargo install --locked bottom --version $VERSION
 
-# Autocompletion
-curl --create-dirs -Lo /tmp/bottom/completion.tar.gz $REPO/releases/download/$TAG/completion.tar.gz
-cd /tmp/bottom && tar xvzf completion.tar.gz
+# Autocompletion (bottom's crates.io version and GitHub release tag match)
+TMP=$(mktemp -d)
+curl -Lo "$TMP/completion.tar.gz" $REPO/releases/download/$VERSION/completion.tar.gz
+tar xzf "$TMP/completion.tar.gz" -C "$TMP"
 
-sudo cp /tmp/bottom/btm.bash /etc/bash_completion.d/btm.bash
-sudo cp /tmp/bottom/_btm /usr/share/zsh/site-functions/_btm
-cp /tmp/bottom/btm.nu $HOME/.config/nushell/btm.nu
+sudo cp "$TMP/btm.bash" /etc/bash_completion.d/btm.bash
+sudo cp "$TMP/_btm" /usr/share/zsh/site-functions/_btm
+cp "$TMP/btm.nu" "$HOME/.config/nushell/btm.nu"
 
-rm -fr /tmp/bottom
+rm -fr "$TMP"

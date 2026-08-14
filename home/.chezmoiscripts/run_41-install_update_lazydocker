@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+source "$CHEZMOI_WORKING_TREE/lib/github-release.sh"
+
+REPO="https://github.com/jesseduffield/lazydocker"
+DEST=~/.local/share
+BIN=~/.local/bin
+
+# Get latest release at least COOLDOWN_DAYS old
+TAG=$(github_release_tag "${REPO#https://github.com/}")
+TAG=${TAG#v}
+
+if [ -z "$TAG" ]; then
+  echo "lazydocker: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
+
+LAZYDOCKER_VERSION=$(lazydocker --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+[[ $LAZYDOCKER_VERSION =~ $VERSION_REGEX ]]
+CURRENT_TAG=${BASH_REMATCH[0]}
+
+if [ "$TAG" = "$CURRENT_TAG" ]; then
+  echo "lazydocker is up-to-date: v$TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_TAG" ]; then
+  echo "Installing lazydocker: v$TAG"
+else
+  echo "Updating lazydocker: v$TAG"
+fi
+
+FILE_STEM="lazydocker_${TAG}_Linux_arm64"
+curl --create-dirs --progress-bar -Lo $DEST/$FILE_STEM.tar.gz $REPO/releases/download/v$TAG/$FILE_STEM.tar.gz
+
+# Validate the checksum
+SHA256=$(cd $DEST && sha256sum $FILE_STEM.tar.gz)
+CHECKSUM=$(curl -sL $REPO/releases/download/v$TAG/checksums.txt | grep $FILE_STEM.tar.gz)
+
+if [[ "$SHA256" != "$CHECKSUM" ]]; then
+  echo "lazydocker checksums do NOT match"
+  rm $DEST/$FILE_STEM.tar.gz
+  exit 1
+fi
+
+# Remove existing install
+rm -fr $DEST/lazydocker
+rm -f $BIN/lazydocker
+
+# Extract the tarball
+mkdir -p $DEST/lazydocker && cd $DEST && tar xzf $FILE_STEM.tar.gz -C lazydocker && rm $FILE_STEM.tar.gz
+
+# Symlink the command
+mkdir -p $BIN && cd $BIN && ln -s $DEST/lazydocker/lazydocker lazydocker

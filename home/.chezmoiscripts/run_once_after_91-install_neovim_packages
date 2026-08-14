@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 
+# TODO: Lazy doesn't have a cooldown feature
+# This issue requests a cooldown feature https://github.com/folke/lazy.nvim/issues/2141
+# PR #2165 implements a cooldown but is unmerged/unreviewed
+# See install-script-cooldown memory for options considered
 echo "Installing neovim packages with Lazy"
 nvim --headless "+Lazy! sync" +qa

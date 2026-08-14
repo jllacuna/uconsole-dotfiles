@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+source "$CHEZMOI_WORKING_TREE/lib/cargo-release.sh"
+
+# Get latest crate version at least COOLDOWN_DAYS old
+VERSION=$(cargo_crate_version zoxide)
+
+if [ -z "$VERSION" ]; then
+  echo "zoxide: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
+
+ZOXIDE_VERSION=$(zoxide --version 2> /dev/null)
+VERSION_REGEX='[0-9\.]+'
+
+[[ $ZOXIDE_VERSION =~ $VERSION_REGEX ]]
+CURRENT_VERSION=${BASH_REMATCH[0]}
+
+if [ "$VERSION" = "$CURRENT_VERSION" ]; then
+  echo "zoxide is up-to-date: v$VERSION"
+  exit 0
+fi
+
+if [ -z "$CURRENT_VERSION" ]; then
+  echo "Installing zoxide: v$VERSION"
+else
+  echo "Updating zoxide: v$VERSION"
+fi
+
+~/.cargo/bin/cargo install --locked zoxide --version $VERSION
+
+# man pages
+MAN_DIR=~/.local/share/man/man1
+mkdir -p $MAN_DIR
+for page in zoxide zoxide-add zoxide-import zoxide-init zoxide-query zoxide-remove; do
+  curl -sL -o $MAN_DIR/$page.1 https://raw.githubusercontent.com/ajeetdsouza/zoxide/v$VERSION/man/man1/$page.1
+done
