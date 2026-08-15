@@ -91,3 +91,83 @@ qrcode() {
   docker run --rm -i -v "$(pwd)":/data/app -w /data/app "$image_id" -s "$size" -o "$out_file" "$input_text"
   echo "Saved QR code to $(pwd)/$out_file (Block size: ${size}px)"
 }
+
+# Resolve the latest docker tag for a specific node version and OS, at least RELEASE_COOLDOWN_DAYS old (default 7), pinned by digest
+# Usage: pinned_node_image VERSION [OS]
+#   VERSION: a specific node version, e.g. "20.11.1"
+#   OS: docker tag os suffix, e.g. alpine, bookworm, bullseye, trixie, slim (default: alpine)
+# Prints e.g. "24.18.0-alpine3.24@sha256:<digest>" for pinning in a Dockerfile/docker run
+pinned_node_image() {
+  local version="${1#v}"
+  local os="${2:-alpine}"
+
+  if [[ -z "$version" ]]; then
+    echo "pinned_node_image: usage: pinned_node_image VERSION [OS]" >&2
+    return 1
+  fi
+
+  local cooldown_days="${RELEASE_COOLDOWN_DAYS:-7}"
+  local cutoff_epoch=$(date -u -d "${cooldown_days} days ago" +%s)
+
+  # alpine tags carry an extra alpine-version suffix (e.g. -alpine3.24); other OS tags
+  # (bookworm, bullseye, trixie, slim, ...) are an exact "-<os>" suffix with nothing after
+  local suffix_regex
+  if [[ "$os" == "alpine" ]]; then
+    suffix_regex="alpine[0-9]+\\.[0-9]+"
+  else
+    suffix_regex="${os//./\\.}" # escape "."
+  fi
+  local version_regex="${version//./\\.}-${suffix_regex}"
+
+  # Get the image name with fully specified node and os versions and pinned to index digest
+  # - ensure tag is active
+  # - ensure the tag has a usable multi-arch manifest digest (older tags can have a null one)
+  # - ensure all images associated with tag were last pushed before RELEASE_COOLDOWN_DAYS
+  #   - Removes milliseconds and converts to an epoch using jq fromdateiso8601
+  local tag
+  tag=$(curl -s "https://hub.docker.com/v2/repositories/library/node/tags?page_size=100&ordering=last_updated&name=${version}-${os}" | jq -r --arg re "^${version_regex}\$" --argjson cutoff_epoch "$cutoff_epoch" '
+    .results
+    | map(select(
+        .tag_status == "active"
+        and .digest != null
+        and (.name | test($re))
+        and (
+          ((.images // []) | map(.last_pushed | sub("\\.[0-9]+Z$"; "Z") | fromdateiso8601) | max) as $push_epoch
+          | $push_epoch != null and $push_epoch <= $cutoff_epoch
+        )
+      ))
+    | first
+    | if . == null then empty else "\(.name)@\(.digest)" end
+  ')
+
+  if [[ -z "$tag" ]]; then
+    echo "pinned_node_image: no cooldown-eligible $os image with a usable digest found on Docker Hub for node $version" >&2
+    return 1
+  fi
+
+  echo "$tag"
+}
+
+# Resolve the latest LTS node.js alpine docker image at least RELEASE_COOLDOWN_DAYS old (default 7), pinned by digest
+# Prints e.g. "24.18.0-alpine3.24@sha256:<digest>" for pinning in a Dockerfile/docker run
+latest_node_lts_image() {
+  local cooldown_days="${RELEASE_COOLDOWN_DAYS:-7}"
+  local cutoff=$(date -u -d "${cooldown_days} days ago" +%Y-%m-%d)
+
+  # Get the latest LTS node version before RELEASE_COOLDOWN_DAYS
+  local node_version
+  node_version=$(curl -s https://nodejs.org/dist/index.json | jq -r --arg cutoff "$cutoff" '
+    map(select(.lts != false and .date <= $cutoff))
+    | sort_by(.date)
+    | last
+    | .version // empty
+  ')
+
+  if [[ -z "$node_version" ]]; then
+    echo "latest_node_lts_image: no active LTS release at least ${cooldown_days} days old found" >&2
+    return 1
+  fi
+  node_version="${node_version#v}"
+
+  pinned_node_image "$node_version"
+}
