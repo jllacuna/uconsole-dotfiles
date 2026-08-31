@@ -49,6 +49,7 @@ sudo apt install -yqq zsh \
   wezterm firefox \
   keychain tree eza \
   dnsutils \
+  unzip \
   docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 # For waybar https://github.com/Alexays/Waybar?tab=readme-ov-file#building-from-source
 sudo apt install -yqq \

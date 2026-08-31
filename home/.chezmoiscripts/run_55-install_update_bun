@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+source "$CHEZMOI_WORKING_TREE/lib/github-release.sh"
+
+REPO="https://github.com/oven-sh/bun"
+DEST=~/.local/share
+BIN=~/.local/bin
+PLATFORM="linux-aarch64"
+
+# Get latest release at least COOLDOWN_DAYS old
+TAG=$(github_release_tag "${REPO#https://github.com/}")
+
+if [ -z "$TAG" ]; then
+  echo "bun: no release at least $COOLDOWN_DAYS days old found, skipping"
+  exit 0
+fi
+
+# bun's tags are "bun-vX.Y.Z", but `bun --version` prints the bare "X.Y.Z"
+VERSION=${TAG#bun-v}
+
+CURRENT_VERSION=$(bun --version 2> /dev/null)
+
+if [ "$VERSION" = "$CURRENT_VERSION" ]; then
+  echo "bun is up-to-date: $TAG"
+  exit 0
+fi
+
+if [ -z "$CURRENT_VERSION" ]; then
+  echo "Installing bun: $TAG"
+else
+  echo "Updating bun: $TAG"
+fi
+
+FILE_STEM="bun-$PLATFORM"
+curl --create-dirs --progress-bar -Lo $DEST/$FILE_STEM.zip $REPO/releases/download/$TAG/$FILE_STEM.zip
+
+# Validate the checksum
+SHA256=$(cd $DEST && sha256sum $FILE_STEM.zip)
+CHECKSUM=$(curl -sL $REPO/releases/download/$TAG/SHASUMS256.txt | grep "  $FILE_STEM.zip\$")
+
+if [[ "$SHA256" != "$CHECKSUM" ]]; then
+  echo "bun checksums do NOT match"
+  rm -f $DEST/$FILE_STEM.zip
+  exit 1
+fi
+
+# Remove existing install
+rm -fr $DEST/bun
+rm -f $BIN/bun $BIN/bunx
+
+# Extract the zip (already wrapped in a "bun-linux-aarch64/" directory)
+cd $DEST && unzip -q $FILE_STEM.zip && mv $FILE_STEM bun && rm $FILE_STEM.zip
+
+# Symlink the commands
+# bunx isn't a separate binary - bun dispatches on argv[0], so both names point at the same file
+mkdir -p $BIN
+ln -sf $DEST/bun/bun $BIN/bun
+ln -sf $DEST/bun/bun $BIN/bunx
