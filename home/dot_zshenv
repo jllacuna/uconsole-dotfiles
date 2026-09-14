@@ -154,20 +154,32 @@ latest_node_lts_image() {
   local cooldown_days="${RELEASE_COOLDOWN_DAYS:-7}"
   local cutoff=$(date -u -d "${cooldown_days} days ago" +%Y-%m-%d)
 
-  # Get the latest LTS node version before RELEASE_COOLDOWN_DAYS
-  local node_version
-  node_version=$(curl -s https://nodejs.org/dist/index.json | jq -r --arg cutoff "$cutoff" '
+  # Get all LTS node versions before RELEASE_COOLDOWN_DAYS, newest first
+  local node_versions
+  node_versions=$(curl -s https://nodejs.org/dist/index.json | jq -r --arg cutoff "$cutoff" '
     map(select(.lts != false and .date <= $cutoff))
     | sort_by(.date)
-    | last
-    | .version // empty
+    | reverse
+    | .[].version
   ')
 
-  if [[ -z "$node_version" ]]; then
+  if [[ -z "$node_versions" ]]; then
     echo "latest_node_lts_image: no active LTS release at least ${cooldown_days} days old found" >&2
     return 1
   fi
-  node_version="${node_version#v}"
 
-  pinned_node_image "$node_version"
+  # Walk back through LTS versions until one has a cooldown-eligible pinned image.
+  # The newest LTS version can clear its own release-date cooldown while its docker
+  # image was only pushed/rebuilt recently, so pinned_node_image still rejects it.
+  local node_version image
+  while IFS= read -r node_version; do
+    node_version="${node_version#v}"
+    if image=$(pinned_node_image "$node_version" 2>/dev/null); then
+      echo "$image"
+      return 0
+    fi
+  done <<< "$node_versions"
+
+  echo "latest_node_lts_image: no LTS release with a cooldown-eligible docker image found" >&2
+  return 1
 }
