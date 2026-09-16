@@ -7,8 +7,10 @@ Show diagnostic under cursor   | gl
 Next diagnostic                | ]d
 Previous diagnostic            | [d
 Toggle blame current line      | <leader>hb
-Next git hunk                  | ]c
-Previous git hunk              | [c
+Next unstaged hunk             | ]c
+Previous unstaged hunk         | [c
+Next change                    | ]C
+Previous change                | [C
 Next reference                 | ]r
 Previous reference             | [r
 Show status of active LSP      | :LspInfo

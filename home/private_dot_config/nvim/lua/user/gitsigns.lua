@@ -16,16 +16,28 @@ gitsigns.setup {
 
     -- Navigation
     map('n', ']c', function()
-      if vim.wo.diff then return ']c' end
-      vim.schedule(function() gs.next_hunk() end)
+      if vim.wo.diff then return ']c' end -- standard diff mode behavior
+      vim.schedule(function() gs.nav_hunk('next') end)
       return '<Ignore>'
-    end, { expr = true, desc = '[git] Next hunk' })
+    end, { expr = true, desc = '[git] Next unstaged hunk' })
 
     map('n', '[c', function()
-      if vim.wo.diff then return '[c' end
-      vim.schedule(function() gs.prev_hunk() end)
+      if vim.wo.diff then return '[c' end -- standard diff mode behavior
+      vim.schedule(function() gs.nav_hunk('prev') end)
       return '<Ignore>'
-    end, { expr = true, desc = '[git] Previous hunk' })
+    end, { expr = true, desc = '[git] Previous unstaged hunk' })
+
+    map('n', ']C', function()
+      if vim.wo.diff then return ']c' end -- fallback to standard diff mode behavior
+      vim.schedule(function() gs.nav_hunk('next', { target = 'all' }) end)
+      return '<Ignore>'
+    end, { expr = true, desc = '[git] Next change' })
+
+    map('n', '[C', function()
+      if vim.wo.diff then return '[c' end -- fallback to standard diff mode behavior
+      vim.schedule(function() gs.nav_hunk('prev', { target = 'all' }) end)
+      return '<Ignore>'
+    end, { expr = true, desc = '[git] Previous change' })
 
     -- Actions
     map('n', '<leader>hs', gs.stage_hunk, { desc = '[git] Stage hunk' })
