@@ -1,17 +1,19 @@
 {
-  "theme": "dark",
-  "editorMode": "vim",
-  "agentPushNotifEnabled": true,
-  "remoteControlAtStartup": true,
   "env": {
     "DISABLE_AUTOUPDATER": "1"
   },
-  "autoUpdatesChannel": "stable",
   "permissions": {
-    "defaultMode": "acceptEdits",
     "allow": [
       "WebFetch",
       "WebSearch"
-    ]
-  }
+    ],
+    "defaultMode": "acceptEdits",
+    "blockReadsOutsideWorkingDirectories": true
+  },
+  "autoUpdatesChannel": "stable",
+  "theme": "dark",
+  "editorMode": "vim",
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true,
+  "cleanupPeriodDays": 365
 }
