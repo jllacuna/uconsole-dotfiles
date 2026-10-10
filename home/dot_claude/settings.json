@@ -7,7 +7,7 @@
       "WebFetch",
       "WebSearch"
     ],
-    "defaultMode": "acceptEdits",
+    "defaultMode": "auto",
     "blockReadsOutsideWorkingDirectories": true
   },
   "autoUpdatesChannel": "stable",
