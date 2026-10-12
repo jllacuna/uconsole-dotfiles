@@ -3,6 +3,7 @@
     "DISABLE_AUTOUPDATER": "1"
   },
   "permissions": {
+    "additionalDirectories": [ "/tmp" ],
     "allow": [
       "WebFetch",
       "WebSearch"
