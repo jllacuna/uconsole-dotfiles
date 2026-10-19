@@ -154,11 +154,12 @@ latest_node_lts_image() {
   local cooldown_days="${RELEASE_COOLDOWN_DAYS:-7}"
   local cutoff=$(date -u -d "${cooldown_days} days ago" +%Y-%m-%d)
 
-  # Get all LTS node versions before RELEASE_COOLDOWN_DAYS, newest first
+  # Get all LTS node versions before RELEASE_COOLDOWN_DAYS, newest major line first
   local node_versions
   node_versions=$(curl -s https://nodejs.org/dist/index.json | jq -r --arg cutoff "$cutoff" '
     map(select(.lts != false and .date <= $cutoff))
-    | sort_by(.date)
+    | map(. + {major: (.version | ltrimstr("v") | split(".")[0] | tonumber)})
+    | sort_by([.major, .date])
     | reverse
     | .[].version
   ')
