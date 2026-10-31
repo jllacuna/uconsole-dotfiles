@@ -4,10 +4,10 @@ fgv() {
     rg --color=always --vimgrep --smart-case $@ |
       fzf --multi \
           --color "hl:-1:underline,hl+:-1:underline:reverse" \
-	  --delimiter : \
+    --delimiter : \
           --preview 'bat --color=always --style=numbers,changes {1} --highlight-line={2}' \
           --preview-window 'down,border-top,+{2}-4' \
-	  --bind "f1:toggle-all"
+    --bind "f1:toggle-all"
   )
 
   if [[ $selected != "" ]]; then
@@ -183,4 +183,27 @@ latest_node_lts_image() {
 
   echo "latest_node_lts_image: no LTS release with a cooldown-eligible docker image found" >&2
   return 1
+}
+
+# List apps with a dependency whose name contains PACKAGE
+# Run from the directory containing the apps
+find_dependent_apps() {
+  local package="$1"
+
+  if [[ -z "$package" ]]; then
+    echo "find_dependent_apps: usage: find_dependent_apps PACKAGE" >&2
+    return 1
+  fi
+
+  local manifest
+  for manifest in ./*/package.json(N); do
+    jq -r --arg package "$package" --arg app "${manifest:h:t}" '
+      [.peerDependencies, .optionalDependencies, .devDependencies, .dependencies]
+      | add // {}
+      | to_entries[]
+      | select(.key | contains($package))
+      | [$app, .key, .value]
+      | @tsv
+    ' "$manifest"
+  done | column -t -s $'\t'
 }
